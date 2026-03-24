@@ -1,26 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --purple: #5319c6;
+  --red: #ff2c34;
+  --white: #ffffff;
+  --bg-dark: #07071a;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Nunito', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--white);
+  overflow-x: hidden;
+}
+
+/* Arabic RTL font */
+[lang="ar"] body,
+[dir="rtl"] body {
+  font-family: 'Tajawal', 'Nunito', sans-serif;
+}
+
+/* RTL adjustments */
+[dir="rtl"] .nav-link::after {
+  left: auto;
+  right: 0;
+}
+[dir="rtl"] .nav-link::after {
+  transform-origin: right;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--purple);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--red);
+}
+
+/* Typography */
+.font-display {
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+/* Glow helpers */
+.glow-purple {
+  box-shadow: 0 0 30px rgba(83, 25, 198, 0.6), 0 0 60px rgba(83, 25, 198, 0.3);
+}
+.glow-red {
+  box-shadow: 0 0 30px rgba(255, 44, 52, 0.6), 0 0 60px rgba(255, 44, 52, 0.3);
+}
+.text-glow {
+  text-shadow: 0 0 30px rgba(83, 25, 198, 0.8);
+}
+
+/* Animated gradient background */
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient {
+  background: linear-gradient(-45deg, #07071a, #13073a, #5319c6, #2a0a5a);
+  background-size: 400% 400%;
+  animation: gradientShift 10s ease infinite;
+}
+
+/* Pulse glow */
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(83, 25, 198, 0.4); }
+  50%       { box-shadow: 0 0 50px rgba(83, 25, 198, 0.9), 0 0 80px rgba(255, 44, 52, 0.4); }
+}
+.pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+/* Float */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-18px); }
+}
+.float {
+  animation: float 5s ease-in-out infinite;
+}
+
+/* Spin slow */
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.spin-slow {
+  animation: spinSlow 20s linear infinite;
+}
+
+/* Blink lightning */
+@keyframes blink {
+  0%, 88%, 100% { opacity: 1; }
+  90%, 93% { opacity: 0.2; }
+  91%, 92% { opacity: 1; }
+}
+.blink {
+  animation: blink 5s ease-in-out infinite;
+}
+
+/* Nav underline */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--red);
+  transition: width 0.3s ease;
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Card base */
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-8px);
+}
+
+/* Mask reveal */
+.mask-reveal {
+  clip-path: inset(0 100% 0 0);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #ffffff 0%, #c084fc 50%, #ff2c34 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Section spacing */
+section {
+  position: relative;
+}
+
+/* Particles canvas */
+#particles-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
