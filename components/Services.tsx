@@ -4,22 +4,23 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
+import Image from "next/image";
 import { useLang } from "@/contexts/LanguageContext";
 
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
-// Unsplash images per service (CSS background-image — no Next.js config needed)
+// Local images per service
 const SERVICE_IMAGES = [
-  "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=75", // electrician
-  "https://images.unsplash.com/photo-1585771724684-38269d6639fd?auto=format&fit=crop&w=800&q=75", // plumber
-  "https://images.unsplash.com/photo-1631545806609-3b95d53e7e7b?auto=format&fit=crop&w=800&q=75", // AC
-  "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=800&q=75",   // CCTV
-  "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=75",   // alarm
-  "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=800&q=75", // painting
-  "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=75", // construction
+  "/assets/images/services/electrical.png",
+  "/assets/images/services/plumbing.png",
+  "/assets/images/services/ac.png",
+  "/assets/images/services/surveillance.png",
+  "/assets/images/services/alarm.png",
+  "/assets/images/services/finishing.png",
+  "/assets/images/services/construction.png",
 ];
 
-// Fallback gradient per service (shown if image fails to load)
+// Fallback gradient per service
 const SERVICE_FALLBACKS = [
   "#1a0a3a", "#0a1f3a", "#0a2a1a", "#1a1a0a", "#2a0a0a", "#1a0a2a", "#0a1a0a",
 ];
@@ -66,19 +67,37 @@ export default function Services() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Header Animation
       ScrollTrigger.create({
         trigger: headRef.current,
         start: "top 88%",
-        onEnter: () => gsap.fromTo(headRef.current, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }),
+        onEnter: () => gsap.fromTo(headRef.current, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }),
       });
 
+      // Cinematic Parallax Background effect for the whole section
+      gsap.to(".bg-parallax", {
+        yPercent: 20,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+
+      // Cards Animation
       const cards = gridRef.current?.querySelectorAll(".svc-img-card");
       if (cards) {
         ScrollTrigger.create({
           trigger: gridRef.current,
           start: "top 85%",
           onEnter: () =>
-            gsap.fromTo(cards, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.65, stagger: 0.07, ease: "power3.out" }),
+            gsap.fromTo(
+              cards, 
+              { y: 80, opacity: 0, scale: 0.95 }, 
+              { y: 0, opacity: 1, scale: 1, duration: 0.8, stagger: 0.1, ease: "power4.out" }
+            ),
         });
       }
     }, sectionRef);
@@ -86,98 +105,126 @@ export default function Services() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-24" style={{ background: "#07071a" }} dir={isRTL ? "rtl" : "ltr"}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section ref={sectionRef} className="relative py-32 overflow-hidden bg-black" dir={isRTL ? "rtl" : "ltr"}>
+      {/* Background Cinematic Glows */}
+      <div className="bg-parallax absolute inset-0 pointer-events-none opacity-50 z-0 flex items-center justify-center">
+        <div className="absolute top-1/4 left-1/4 w-[40rem] h-[40rem] bg-[#5319c6] rounded-full blur-[12rem] mix-blend-screen opacity-30"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-[35rem] h-[35rem] bg-[#ff2c34] rounded-full blur-[12rem] mix-blend-screen opacity-20"></div>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
 
         {/* Header */}
-        <div ref={headRef} className={`mb-14 flex flex-col sm:flex-row sm:items-end justify-between gap-6 ${isRTL ? "sm:flex-row-reverse" : ""}`}>
-          <div>
-            <span className="text-xs font-bold uppercase tracking-[0.25em]" style={{ color: "#ff2c34" }}>
+        <div ref={headRef} className={`mb-20 flex flex-col sm:flex-row sm:items-end justify-between gap-6 opacity-0 ${isRTL ? "sm:flex-row-reverse" : ""}`}>
+          <div className="relative">
+            <span className="text-sm font-bold uppercase tracking-[0.3em] text-[#ff2c34] flex items-center gap-4">
+              <span className="w-10 h-[2px] bg-[#ff2c34]"></span>
               {t.services.badge}
             </span>
-            <h2 className="mt-3 text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight">
+            <h2 className="mt-4 text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight drop-shadow-lg">
               {t.services.title}
             </h2>
           </div>
-          <p className="text-sm max-w-xs leading-relaxed" style={{ color: "#8888aa" }}>
+          <p className="text-base max-w-md leading-relaxed text-[#a0a0c0]">
             {t.services.sub}
           </p>
         </div>
 
-        {/* Grid — 2 cols on sm, 3 on lg, 4 on xl */}
+        {/* Grid — Cinematic Layout */}
         <div
           ref={gridRef}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
         >
           {t.services.items.map((svc, i) => (
             <div
               key={i}
-              className="svc-img-card group relative overflow-hidden opacity-0 rounded-sm"
-              style={{ height: 320 }}
+              className="svc-img-card group relative overflow-hidden rounded-xl bg-black border border-[#ffffff10] shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(83,25,198,0.3)]"
+              style={{ height: 400 }}
             >
-              {/* Background image with zoom on hover */}
+              {/* Background image container */}
               <div
-                className="svc-img-bg absolute inset-0"
+                className="absolute inset-0 w-full h-full transition-transform duration-700 ease-in-out group-hover:scale-110"
+                style={{ backgroundColor: SERVICE_FALLBACKS[i] }}
+              >
+                <Image 
+                  src={SERVICE_IMAGES[i]}
+                  alt={svc.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                />
+              </div>
+
+              {/* Dark cinematic gradient overlay */}
+              <div
+                className="absolute inset-0 transition-opacity duration-500 ease-in-out group-hover:opacity-90"
                 style={{
-                  backgroundImage: `url(${SERVICE_IMAGES[i]})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  backgroundColor: SERVICE_FALLBACKS[i],
+                  background: "linear-gradient(to top, rgba(0,0,0,0.95) 10%, rgba(83,25,198,0.4) 60%, rgba(0,0,0,0.1) 100%)",
                 }}
               />
-
-              {/* Dark gradient overlay */}
               <div
-                className="absolute inset-0"
+                className="absolute inset-0 opacity-100 group-hover:opacity-0 transition-opacity duration-500 ease-in-out"
                 style={{
-                  background: "linear-gradient(to top, rgba(7,7,26,0.95) 35%, rgba(7,7,26,0.35) 100%)",
+                  background: "linear-gradient(to top, rgba(0,0,0,0.95) 20%, rgba(0,0,0,0.2) 100%)",
                 }}
               />
 
               {/* Red glow border on hover */}
               <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-300"
-                style={{ boxShadow: "inset 0 0 0 2px #ff2c34" }}
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500 border-2 border-[#ff2c34] rounded-xl z-20"
+                style={{ boxShadow: "inset 0 0 20px rgba(255,44,52,0.5)" }}
               />
 
               {/* Content */}
-              <div className={`absolute inset-0 p-6 flex flex-col justify-between ${isRTL ? "items-end text-right" : ""}`}>
+              <div className={`relative z-10 h-full p-8 flex flex-col justify-between ${isRTL ? "items-end text-right" : ""}`}>
                 {/* Top: number + icon */}
-                <div className={`flex items-center justify-between w-full ${isRTL ? "flex-row-reverse" : ""}`}>
+                <div className={`flex items-start justify-between w-full ${isRTL ? "flex-row-reverse" : ""}`}>
                   <span
-                    className="text-xs font-bold tracking-[0.2em]"
-                    style={{ color: "rgba(255,255,255,0.3)" }}
+                    className="text-4xl font-black text-transparent opacity-40 transition-opacity duration-300 group-hover:opacity-80"
+                    style={{ WebkitTextStroke: "1px white" }}
                   >
                     {svc.num}
                   </span>
-                  <span
-                    className="w-9 h-9 flex items-center justify-center rounded-sm transition-colors duration-200"
-                    style={{ background: "rgba(83,25,198,0.55)", color: "#fff" }}
-                  >
-                    {ICONS[i]}
-                  </span>
+                  <div className="relative group/icon">
+                     <span
+                       className="w-12 h-12 flex items-center justify-center rounded-full transition-all duration-500 backdrop-blur-md bg-white/10 group-hover:bg-[#ff2c34] group-hover:shadow-[0_0_15px_#ff2c34] text-white"
+                     >
+                       {ICONS[i]}
+                     </span>
+                  </div>
                 </div>
 
                 {/* Bottom: title + desc + link */}
-                <div>
-                  <h3 className="text-lg font-black text-white leading-tight mb-2">
+                <div className="transform transition-transform duration-500 translate-y-4 group-hover:translate-y-0">
+                  <h3 className="text-2xl font-black text-white leading-tight mb-3 drop-shadow-md">
                     {svc.title}
                   </h3>
                   <p
-                    className="text-xs leading-relaxed mb-4 line-clamp-3"
-                    style={{ color: "rgba(255,255,255,0.6)" }}
+                    className="text-sm leading-relaxed mb-6 line-clamp-3 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100"
                   >
                     {svc.desc}
                   </p>
                   <Link
                     href="/services"
-                    className={`inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-all duration-200 group-hover:gap-3 ${isRTL ? "flex-row-reverse" : ""}`}
+                    className={`inline-flex items-center gap-3 text-sm font-bold uppercase tracking-widest transition-all duration-300 ${isRTL ? "flex-row-reverse" : ""}`}
                     style={{ color: "#ff2c34" }}
                   >
                     {isRTL ? (
-                      <><span>{svc.link}</span><span>←</span></>
+                      <>
+                        <span className="relative overflow-hidden group-hover:text-white transition-colors duration-300">
+                          {svc.link}
+                          <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#ff2c34] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-right duration-300"></span>
+                        </span>
+                        <span className="transform group-hover:-translate-x-2 transition-transform duration-300 text-white">←</span>
+                      </>
                     ) : (
-                      <><span>{svc.link}</span><span>→</span></>
+                      <>
+                        <span className="relative overflow-hidden group-hover:text-white transition-colors duration-300">
+                          {svc.link}
+                          <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#ff2c34] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
+                        </span>
+                        <span className="transform group-hover:translate-x-2 transition-transform duration-300 text-white">→</span>
+                      </>
                     )}
                   </Link>
                 </div>
