@@ -114,6 +114,16 @@ export const translations = {
         { title: "Solutions Sur-Mesure", desc: "De l'étude de faisabilité à l'exécution, chaque projet est pensé pour répondre à vos besoins." },
       ],
     },
+    testimonials: {
+      badge: "Témoignages",
+      title: "Ce que disent nos clients",
+      sub: "La satisfaction de nos partenaires et clients est notre meilleure carte de visite.",
+      items: [
+        { text: "Une équipe réactive et très professionnelle. L'installation de notre système de climatisation s'est faite sans le moindre retard. Excellent suivi.", author: "Karim M.", role: "Gérant d'Hôtel" },
+        { text: "Nous avons fait appel à CAS pour la rénovation électrique complète de notre usine. Travail propre, sécurisé et strictement aux normes.", author: "Youssef E.", role: "Directeur Industriel" },
+        { text: "Des finitions en plâtre et peinture impeccables. L'artisanat et la précision dont ils ont fait preuve dans notre villa sont tout simplement remarquables.", author: "Fatima Z.", role: "Particulier" },
+      ]
+    },
     projects: {
       badge: "Réalisations",
       title: "Nos projets récents",
@@ -305,6 +315,16 @@ export const translations = {
         { title: "حلول مخصصة", desc: "من دراسة الجدوى إلى التنفيذ، يتم تصميم كل مشروع خصيصاً لتلبية احتياجاتكم." },
       ],
     },
+    testimonials: {
+      badge: "آراء العملاء",
+      title: "ماذا يقول عملاؤنا؟",
+      sub: "رضا شركائنا وعملائنا هو أفضل بطاقة تعريف لنا.",
+      items: [
+        { text: "فريق متجاوب ومحترف للغاية. تمت عملية تركيب نظام التكييف دون أي تأخير. متابعة ممتازة للعملاء.", author: "كريم م.", role: "مدير فندق" },
+        { text: "لجأنا إلى CAS للتجديد الكهربائي الكامل في مصنعنا. عمل نظيف، آمن ومطابق للمعايير الصارمة.", author: "يوسف إ.", role: "مدير صناعي" },
+        { text: "تشطيبات الجبص والطلاء لا تشوبها شائبة. الحرفية والدقة التي أظهروها في فيلتنا كانت رائعة بصراحة.", author: "فاطمة ز.", role: "عميل خاص" },
+      ]
+    },
     projects: {
       badge: "الإنجازات",
       title: "مشاريعنا الأخيرة",
@@ -400,6 +420,10 @@ export type Translations = {
   advantages: {
     badge: string; title: string; sub: string;
     items: readonly { title: string; desc: string }[];
+  };
+  testimonials: {
+    badge: string; title: string; sub: string;
+    items: readonly { text: string; author: string; role: string }[];
   };
   projects: {
     badge: string; title: string; sub: string; viewAll: string;
