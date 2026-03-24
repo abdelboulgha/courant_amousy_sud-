@@ -356,88 +356,116 @@ export default function Hero() {
             opacity: 0,
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",          /* vertical center */
-            padding: "clamp(24px, 5vw, 80px)",
-            paddingTop: 90,                    /* navbar clearance */
-            paddingBottom: 100,                /* stats bar clearance */
+            justifyContent: "space-between",
+            padding: "clamp(20px, 4vw, 60px)",
+            paddingTop: 90,
+            paddingBottom: "clamp(20px, 4vh, 44px)",
           }}
         >
-          <div style={{ maxWidth: 600 }}>
 
-            {/* Eyebrow */}
-            <div style={{
-              display: "flex", alignItems: "center", gap: 12,
-              marginBottom: 24,
-              flexDirection: isRTL ? "row-reverse" : "row",
+          {/* ── TOP: eyebrow ─────────────────────────────── */}
+          <div style={{
+            display: "flex", alignItems: "center", gap: 14,
+            flexDirection: isRTL ? "row-reverse" : "row",
+          }}>
+            <span style={{ width: 20, height: 2, background: "#ff2c34", display: "block", flexShrink: 0 }} />
+            <span style={{
+              fontSize: 9, fontWeight: 700, letterSpacing: "0.32em",
+              textTransform: "uppercase", color: "rgba(255,255,255,0.38)",
             }}>
-              <span style={{ width: 24, height: 2, background: "#ff2c34", display: "block", flexShrink: 0 }} />
-              <span style={{
-                fontSize: 9, fontWeight: 700, letterSpacing: "0.3em",
-                textTransform: "uppercase", color: "rgba(255,255,255,0.4)",
-              }}>
-                {t.hero.tagline}
-              </span>
-            </div>
+              {t.hero.tagline}
+            </span>
+          </div>
 
-            {/* Title — 2 lines, safe size */}
-            <h1 style={{ margin: 0, padding: 0, lineHeight: 1.08, letterSpacing: "-0.02em" }}>
+          {/* ── MIDDLE: main content ──────────────────────── */}
+          <div style={{ position: "relative" }}>
+
+            {/* Decorative "7" watermark behind title */}
+            <span aria-hidden style={{
+              position: "absolute",
+              top: "50%", right: isRTL ? "auto" : "-2%", left: isRTL ? "-2%" : "auto",
+              transform: "translateY(-55%)",
+              fontSize: "clamp(160px, 22vw, 300px)",
+              fontWeight: 900,
+              color: "transparent",
+              WebkitTextStroke: "1px rgba(255,255,255,0.04)",
+              lineHeight: 1,
+              pointerEvents: "none",
+              userSelect: "none",
+              letterSpacing: "-0.04em",
+            }}>7</span>
+
+            {/* Left vertical accent line */}
+            {!isRTL && (
+              <span aria-hidden style={{
+                position: "absolute",
+                left: -20, top: 0, bottom: 0,
+                width: 2,
+                background: "linear-gradient(to bottom, #ff2c34, transparent)",
+              }} />
+            )}
+            {isRTL && (
+              <span aria-hidden style={{
+                position: "absolute",
+                right: -20, top: 0, bottom: 0,
+                width: 2,
+                background: "linear-gradient(to bottom, #ff2c34, transparent)",
+              }} />
+            )}
+
+            {/* Title */}
+            <h1 style={{ margin: 0, padding: 0 }}>
+              {/* Line 1 — white fill */}
               <span style={{
                 display: "block",
-                fontSize: "clamp(28px, 3.8vw, 58px)",
+                fontSize: "clamp(34px, 5.5vw, 82px)",
                 fontWeight: 900,
                 color: "#ffffff",
+                lineHeight: 1.0,
+                letterSpacing: "-0.03em",
+                textTransform: "uppercase",
               }}>
                 {t.hero.h1a}
               </span>
+              {/* Line 2 — outlined only (text-stroke), no fill */}
               <span style={{
                 display: "block",
-                fontSize: "clamp(28px, 3.8vw, 58px)",
+                fontSize: "clamp(34px, 5.5vw, 82px)",
                 fontWeight: 900,
-                color: "#ff2c34",
+                color: "transparent",
+                lineHeight: 1.05,
+                letterSpacing: "-0.03em",
+                textTransform: "uppercase",
+                WebkitTextStroke: "2px #ff2c34",
               }}>
                 {t.hero.h1b}
               </span>
             </h1>
 
-            {/* Thin separator */}
-            <div style={{ width: 40, height: 2, background: "rgba(255,255,255,0.12)", margin: "20px 0" }} />
+            {/* Horizontal rule */}
+            <div style={{
+              display: "flex", alignItems: "center", gap: 12, margin: "18px 0",
+              flexDirection: isRTL ? "row-reverse" : "row",
+            }}>
+              <span style={{ width: 36, height: 1, background: "#ff2c34", display: "block" }} />
+              <span style={{ width: 60, height: 1, background: "rgba(255,255,255,0.1)", display: "block" }} />
+            </div>
 
             {/* Subtitle */}
             <p style={{
               margin: 0,
-              fontSize: 14,
+              fontSize: 13,
               lineHeight: 1.75,
-              color: "rgba(255,255,255,0.48)",
-              maxWidth: 420,
+              color: "rgba(255,255,255,0.45)",
+              maxWidth: 400,
               textAlign: isRTL ? "right" : "left",
             }}>
               {t.hero.sub}
             </p>
 
-            {/* Service chips */}
-            <div style={{
-              marginTop: 20,
-              display: "flex",
-              flexWrap: "wrap",
-              gap: 7,
-              justifyContent: isRTL ? "flex-end" : "flex-start",
-            }}>
-              {t.ticker.slice(0, 5).map((chip, i) => (
-                <span key={i} style={{
-                  fontSize: 9, fontWeight: 700, letterSpacing: "0.15em",
-                  textTransform: "uppercase",
-                  padding: "5px 10px",
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  color: "rgba(255,255,255,0.45)",
-                }}>
-                  {chip}
-                </span>
-              ))}
-            </div>
-
             {/* CTA buttons */}
             <div style={{
-              marginTop: 28,
+              marginTop: 26,
               display: "flex", gap: 10, flexWrap: "wrap",
               justifyContent: isRTL ? "flex-end" : "flex-start",
             }}>
@@ -449,16 +477,18 @@ export default function Hero() {
                 fontSize: 10, fontWeight: 800,
                 textTransform: "uppercase", letterSpacing: "0.2em",
                 textDecoration: "none",
+                transition: "background 0.2s",
               }}>
                 {t.hero.btn1}
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ transform: isRTL ? "rotate(180deg)" : "none" }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                  style={{ transform: isRTL ? "rotate(180deg)" : "none" }}>
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </Link>
               <Link href="/contact" style={{
-                display: "inline-flex", alignItems: "center",
+                display: "inline-flex", alignItems: "center", gap: 8,
                 padding: "13px 26px",
-                background: "rgba(255,255,255,0.07)",
+                background: "rgba(255,255,255,0.05)",
                 color: "#ffffff",
                 fontSize: 10, fontWeight: 700,
                 textTransform: "uppercase", letterSpacing: "0.2em",
@@ -471,37 +501,44 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Stats bar — pinned to bottom */}
+          {/* ── BOTTOM: stats bar full width ─────────────── */}
           <div style={{
-            position: "absolute",
-            bottom: "clamp(24px, 4vh, 40px)",
-            left: "clamp(24px, 5vw, 80px)",
-            right: "clamp(24px, 5vw, 80px)",
             display: "flex",
-            gap: "clamp(16px, 3vw, 40px)",
-            flexWrap: "wrap",
-            flexDirection: isRTL ? "row-reverse" : "row",
             alignItems: "flex-end",
+            gap: 0,
+            borderTop: "1px solid rgba(255,255,255,0.07)",
+            paddingTop: 16,
+            flexDirection: isRTL ? "row-reverse" : "row",
           }}>
             {t.stats.map((s, i) => (
-              <div key={i} style={{ display: "flex", flexDirection: "column", gap: 3, textAlign: isRTL ? "right" : "left" }}>
+              <div key={i} style={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                gap: 4,
+                textAlign: "center",
+                borderRight: i < t.stats.length - 1 ? "1px solid rgba(255,255,255,0.07)" : "none",
+                paddingLeft: 8,
+                paddingRight: 8,
+              }}>
                 <span style={{
-                  fontSize: "clamp(16px, 2vw, 24px)", fontWeight: 900,
+                  fontSize: "clamp(18px, 2.2vw, 30px)", fontWeight: 900,
                   color: i === 0 ? "#ff2c34" : "#ffffff",
-                  letterSpacing: "-0.02em", lineHeight: 1,
+                  letterSpacing: "-0.03em", lineHeight: 1,
                 }}>
                   {s.value}
                 </span>
                 <span style={{
                   fontSize: 8, fontWeight: 600,
                   textTransform: "uppercase", letterSpacing: "0.18em",
-                  color: "rgba(255,255,255,0.3)",
+                  color: "rgba(255,255,255,0.28)",
                 }}>
                   {s.label}
                 </span>
               </div>
             ))}
           </div>
+
         </div>
 
         {/* ── Scroll-synced service labels ─────────────── */}
