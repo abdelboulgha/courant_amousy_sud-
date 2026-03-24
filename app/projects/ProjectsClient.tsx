@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, MouseEvent } from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -14,187 +14,219 @@ import { useLang } from "@/contexts/LanguageContext";
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
 // ==========================================
-// 1. PROJECT DATASET
+// OUT-OF-THE-BOX DATASET (Enhanced)
 // ==========================================
-// High-quality Unsplash URLs matching the sectors
 const PROJECT_DATA = [
   {
     id: 1,
     tag: "Électricité",
     category: "electricity",
-    titleFR: "Complexe résidentiel moderne",
-    titleAR: "مجمع سكني حديث",
-    descFR: "Câblage complet, tableaux divisionnaires et mise aux normes NF C 15-100 pour 24 appartements de haut standing.",
-    descAR: "توصيل كامل ولوحات فرعية وتطبيق معايير للسلامة لـ 24 شقة فاخرة.",
-    meta: "Région Sud · 2024",
+    titleFR: "Complexe Résidentiel 'Les Lumières'",
+    titleAR: "مجمع 'الأضواء' السكني",
+    descFR: "Déploiement électrique complet haute et basse tension pour 24 villas intelligentes.",
+    descAR: "نشر كهربائي كامل عالي ومنخفض الجهد لـ 24 فيلا ذكية.",
+    challengeFR: "Intégrer la domotique sans compromettre l'esthétique épurée des intérieurs.",
+    solutionFR: "Câblage invisible, tableaux divisionnaires encastrés et intégration de la norme NF C 15-100.",
+    impactFR: "-30% de consommation énergétique grâce à l'éclairage LED intelligent.",
     image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=1200&q=80",
+    client: "Groupe Immobilier Sud",
+    duration: "8 Mois",
   },
   {
     id: 2,
     tag: "Climatisation",
     category: "ac",
-    titleFR: "Hôtel 4 étoiles",
-    titleAR: "فندق 4 نجوم",
-    descFR: "Étude thermique, fourniture et pose de systèmes multi-splits et VRV sur 6 niveaux avec régulation centralisée.",
-    descAR: "دراسة حرارية، توريد وتركيب أنظمة تكييف متطورة على 6 طوابق.",
-    meta: "Centre-ville · 2024",
+    titleFR: "Hôtel 4 Étoiles 'L'Oasis'",
+    titleAR: "فندق 'الواحة' 4 نجوم",
+    descFR: "Climatisation centralisée de 120 chambres avec contrôle individuel et traitement d'air.",
+    descAR: "تكييف مركزي لـ 120 غرفة مع تحكم فردي ومعالجة الهواء.",
+    challengeFR: "Maintenir un silence absolu (inférieur à 20dB) dans les suites premium.",
+    solutionFR: "Installation de systèmes VRV ultra-silencieux avec gaines acoustiques spéciales.",
+    impactFR: "Confort thermique optimal et certification énergétique classe A.",
     image: "https://images.unsplash.com/photo-1522045585501-8bfebbeecab9?auto=format&fit=crop&w=1200&q=80",
+    client: "Hospitality Ventures",
+    duration: "12 Mois",
   },
   {
     id: 3,
-    tag: "Travaux divers",
+    tag: "Construction",
     category: "construction",
-    titleFR: "Villa d'architecte",
-    titleAR: "فيلا معمارية",
-    descFR: "Construction complète incluant fondations, structure béton armé et aménagements extérieurs avec piscine.",
-    descAR: "بناء كامل يشمل الأساسات وهيكل الخرسانة المسلحة وتجهيزات خارجية.",
-    meta: "Région Sud · 2023",
+    titleFR: "Siège Social 'Tech-Hub'",
+    titleAR: "المقر الرئيسي 'تيك هاب'",
+    descFR: "Construction tous corps d'état d'un bâtiment de 3 étages aux normes écologiques.",
+    descAR: "بناء شامل لمقر من 3 طوابق وفق المعايير البيئية.",
+    challengeFR: "Un délai serré de construction tout en utilisant des matériaux durables.",
+    solutionFR: "Gestion de projet agile, fondations renforcées et architecture bioclimatique.",
+    impactFR: "Livraison 2 semaines avant la date limite avec zéro défaut de finition.",
     image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80",
+    client: "Tech Solutions Maroc",
+    duration: "14 Mois",
   },
   {
     id: 4,
-    tag: "Vidéosurveillance",
+    tag: "Surveillance & Alarme",
     category: "surveillance",
-    titleFR: "Site industriel sécurisé",
-    titleAR: "موقع صناعي آمن",
-    descFR: "Installation de 48 caméras IP HD, infrastructure NVR, contrôle d'accès biométrique et interphonie sécurisée.",
-    descAR: "تركيب 48 كاميرا IP عالية الدقة وبنية تحتية وأنظمة تحكم بالوصول.",
-    meta: "Zone industrielle · 2023",
+    titleFR: "Data Center Sécurisé",
+    titleAR: "مركز بيانات آمن",
+    descFR: "Maillage de 60 caméras IP 4K, contrôle d'accès biométrique et alarmes volumétriques.",
+    descAR: "شبكة من 60 كاميرا 4K، تحكم بالوصول البيومتري وإنذارات حجمية.",
+    challengeFR: "Sécuriser une zone critique de 2000m² sans aucun angle mort.",
+    solutionFR: "Modélisation 3D pour l'emplacement des caméras et réseau fibre optique redondant.",
+    impactFR: "Niveau de sécurité TIER III atteint, audit validé du premier coup.",
     image: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=1200&q=80",
+    client: "Banque Nationale",
+    duration: "4 Mois",
   },
   {
     id: 5,
     tag: "Peinture & Plâtre",
     category: "painting",
-    titleFR: "Résidence premium",
-    titleAR: "سكن فاخر",
-    descFR: "Plâtrage haute précision, enduit de finition lisse, peinture décorative mate et création de faux-plafonds lumineux (1 200 m²).",
-    descAR: "جبس، طبقة إنهاء ناعمة، طلاء ديكوري غير لامع وأسقف معلقة.",
-    meta: "Région Sud · 2024",
+    titleFR: "Galerie d'Art Contemporain",
+    titleAR: "معرض الفن المعاصر",
+    descFR: "Finitions intérieures d'exception : stuc Vénitien, faux-plafonds flottants et peinture mate muséale.",
+    descAR: "تشطيبات داخلية استثنائية: الجص البندقي وأسقف عائمة.",
+    challengeFR: "Créer des surfaces parfaitement lisses pour mettre en valeur les œuvres d'art.",
+    solutionFR: "Application de 4 couches d'enduit avec ponçage millimétrique et éclairage rasant de contrôle.",
+    impactFR: "Rendu visuel époustouflant, acclamé par les critiques locaux.",
     image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=1200&q=80",
+    client: "Ministère de la Culture",
+    duration: "3 Mois",
   },
   {
     id: 6,
     tag: "Plomberie",
     category: "plumbing",
-    titleFR: "Réfection de réseau tertiaire",
-    titleAR: "تجديد الشبكة الصحية",
-    descFR: "Remplacement complet de la tuyauterie cuivre et PVC, installation de sanitaires modernes pour un immeuble de bureaux.",
-    descAR: "استبدال كامل للأنابيب وتركيب مرافق صحية حديثة لمبنى إداري.",
-    meta: "Pôle d'affaires · 2023",
+    titleFR: "Complexe Sportif 'Aqua'",
+    titleAR: "المركب الرياضي 'أكوا'",
+    descFR: "Installation de systèmes de plomberie lourde, traitement d'eau de piscine et blocs sanitaires.",
+    descAR: "تركيب أنظمة السباكة الثقيلة ومعالجة مياه المسبح.",
+    challengeFR: "Gérer la pression d'eau d'un bassin olympique et de 40 douches simultanées.",
+    solutionFR: "Mise en place de pompes à débit variable et canalisations anti-corrosion en PPR.",
+    impactFR: "Réseau hydraulique 100% fiable, zéro fuite détectée après 2 ans d'exploitation.",
     image: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    id: 7,
-    tag: "Système d'alarme",
-    category: "alarm",
-    titleFR: "Hub logistique central",
-    titleAR: "مركز لوجستي مركزي",
-    descFR: "Déploiement d'un système d'alarme intrusion maillé, détecteurs volumétriques et liaison directe avec centre de télésurveillance.",
-    descAR: "نشر نظام إنذار ضد التطفل، ومستشعرات وربط مباشر مع مركز المراقبة.",
-    meta: "Zone Franche · 2024",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    id: 8,
-    tag: "Électricité",
-    category: "electricity",
-    titleFR: "Bureaux Tech-Hub",
-    titleAR: "مكاتب محور التكنولوجيا",
-    descFR: "Éclairage LED intelligent, planchers techniques, baies de brassage informatique et onduleurs de secours.",
-    descAR: "إضاءة LED ذكية، أرضيات تقنية، وخوادم احتياطية.",
-    meta: "Technopark · 2025",
-    image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1200&q=80",
+    client: "Commune Urbaine",
+    duration: "6 Mois",
   },
 ];
 
 const CATEGORIES = [
-  { id: "all", labelFR: "Tous", labelAR: "الكل" },
+  { id: "all", labelFR: "Tous les Projets", labelAR: "كل المشاريع" },
   { id: "electricity", labelFR: "Électricité", labelAR: "كهرباء" },
   { id: "plumbing", labelFR: "Plomberie", labelAR: "سباكة" },
   { id: "ac", labelFR: "Climatisation", labelAR: "تكييف" },
-  { id: "surveillance", labelFR: "Vidéosurveillance", labelAR: "مراقبة" },
-  { id: "alarm", labelFR: "Alarme", labelAR: "إنذار" },
-  { id: "painting", labelFR: "Peinture/Plâtre", labelAR: "طلاء وجبس" },
-  { id: "construction", labelFR: "Construction", labelAR: "أعمال متنوعة" },
+  { id: "surveillance", labelFR: "Sécurité", labelAR: "أمن" },
+  { id: "painting", labelFR: "Finition", labelAR: "تشطيب" },
+  { id: "construction", labelFR: "Gros Œuvre", labelAR: "البناء" },
 ];
 
 export default function ProjectsClient() {
-  const { isRTL } = useLang();
+  const { t, isRTL } = useLang();
   
+  const containerRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
-  const parallaxRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
-  const gridWrapRef = useRef<HTMLDivElement>(null);
-  const filterBtnRef = useRef<HTMLDivElement>(null);
+  const horizontalRef = useRef<HTMLDivElement>(null);
+  const horizontalWrapRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
 
   const [filter, setFilter] = useState("all");
   const [displayedProjects, setDisplayedProjects] = useState(PROJECT_DATA);
   const [isChanging, setIsChanging] = useState(false);
+  const [modalProject, setModalProject] = useState<typeof PROJECT_DATA[0] | null>(null);
 
-  // Initial Hero Animations + Parallax
+  // Hero Flashlight Effect
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: globalThis.MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  // Main Scroll Animations
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Pinning hero for cinematic entrance
-      ScrollTrigger.create({
-        trigger: heroRef.current,
-        start: "top top",
-        end: "+=60%",
-        pin: true,
-        scrub: 1,
-        animation: gsap.fromTo(
-          textRef.current,
-          { opacity: 1, y: 0, scale: 1 },
-          { opacity: 0, y: -150, scale: 0.85, ease: "power2.inOut" }
-        ),
-      });
-
-      // Background slower parallax
-      gsap.to(parallaxRef.current, {
-        yPercent: 30,
-        ease: "none",
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-
-      // Simple fade-up for hero title
+      // 1. Hero Title Reveal
       gsap.fromTo(
-        ".hero-stgr",
-        { y: 60, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: "power4.out", delay: 0.3 }
+        ".hero-char",
+        { opacity: 0, y: 100, rotateX: -90 },
+        {
+          opacity: 1,
+          y: 0,
+          rotateX: 0,
+          stagger: 0.05,
+          duration: 1.2,
+          ease: "back.out(1.5)",
+          delay: 0.5,
+        }
       );
-    }, heroRef);
+
+      // 2. Stats Counters Setup
+      const statElements = gsap.utils.toArray(".stat-number");
+      statElements.forEach((el: unknown) => {
+        const element = el as HTMLElement;
+        const targetValue = parseInt(element.getAttribute("data-value") || "0", 10);
+        ScrollTrigger.create({
+          trigger: statsRef.current,
+          start: "top 80%",
+          once: true,
+          onEnter: () => {
+            gsap.to(element, {
+              innerHTML: targetValue,
+              duration: 2.5,
+              ease: "power2.out",
+              snap: { innerHTML: 1 },
+              onUpdate: function () {
+                element.innerHTML = Math.ceil(Number(this.targets()[0].innerHTML)) + (element.getAttribute("data-suffix") || "");
+              },
+            });
+          },
+        });
+      });
+
+      // 3. Horizontal Scroll Section
+      if (horizontalRef.current && horizontalWrapRef.current) {
+        const wrapWidth = horizontalWrapRef.current.offsetWidth;
+        const windowWidth = window.innerWidth;
+        
+        gsap.to(horizontalWrapRef.current, {
+          x: -(wrapWidth - windowWidth + 100),
+          ease: "none",
+          scrollTrigger: {
+            trigger: horizontalRef.current,
+            pin: true,
+            scrub: 1,
+            end: () => "+=" + (wrapWidth - windowWidth),
+          },
+        });
+      }
+
+    }, containerRef);
     return () => ctx.revert();
   }, []);
 
-  // Filter Transition Logic
+  // Filter Logic
   const handleFilterChange = (newFilter: string) => {
     if (newFilter === filter || isChanging) return;
     setIsChanging(true);
     
-    // Animate current cards out
-    gsap.to(".project-card", {
+    gsap.to(".project-card-3d", {
       opacity: 0,
-      y: 30,
-      scale: 0.95,
+      scale: 0.8,
+      rotationY: 15,
+      y: 50,
       stagger: 0.05,
-      duration: 0.4,
+      duration: 0.5,
       ease: "power2.in",
       onComplete: () => {
         setFilter(newFilter);
-        setDisplayedProjects(
-          newFilter === "all" ? PROJECT_DATA : PROJECT_DATA.filter((p) => p.category === newFilter)
-        );
-        // Animate new cards in
+        setDisplayedProjects(newFilter === "all" ? PROJECT_DATA : PROJECT_DATA.filter((p) => p.category === newFilter));
         setTimeout(() => {
           gsap.fromTo(
-            ".project-card",
-            { opacity: 0, y: 40, scale: 0.9 },
-            { opacity: 1, y: 0, scale: 1, stagger: 0.08, duration: 0.6, ease: "back.out(1.5)" }
+            ".project-card-3d",
+            { opacity: 0, scale: 0.8, rotationY: -15, y: 50 },
+            { opacity: 1, scale: 1, rotationY: 0, y: 0, stagger: 0.08, duration: 0.7, ease: "back.out(1.2)" }
           );
           setIsChanging(false);
           ScrollTrigger.refresh();
@@ -203,160 +235,244 @@ export default function ProjectsClient() {
     });
   };
 
-  // Re-trigger ScrollReveals on mount or regular scroll
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const cards = gsap.utils.toArray(".project-card");
-      cards.forEach((card: any) => {
-        ScrollTrigger.create({
-          trigger: card,
-          start: "top 85%",
-          animation: gsap.fromTo(
-            card,
-            { opacity: 0, y: 50 },
-            { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
-          ),
-          once: true,
-        });
-      });
-    }, gridWrapRef);
-    return () => ctx.revert();
-  }, [displayedProjects]);
+  // 3D Card Hover Effect Handlers
+  const handleCardMouseMove = (e: MouseEvent<HTMLDivElement>, cardElement: HTMLDivElement) => {
+    const rect = cardElement.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateX = ((y - centerY) / centerY) * -10; // Max 10 deg
+    const rotateY = ((x - centerX) / centerX) * 10;  // Max 10 deg
+
+    gsap.to(cardElement, {
+      rotateX,
+      rotateY,
+      transformPerspective: 1000,
+      ease: "power1.out",
+      duration: 0.4,
+    });
+  };
+
+  const handleCardMouseLeave = (cardElement: HTMLDivElement) => {
+    gsap.to(cardElement, {
+      rotateX: 0,
+      rotateY: 0,
+      ease: "power3.out",
+      duration: 0.8,
+    });
+  };
+
+  // Helper to split text for GSAP
+  const renderSplitText = (text: string) => {
+    return text.split("").map((char, i) => (
+      <span key={i} className="hero-char inline-block" style={{ whiteSpace: char === " " ? "pre" : "normal" }}>
+        {char}
+      </span>
+    ));
+  };
 
   return (
-    <div className="bg-[#04040a] min-h-screen text-white selection:bg-[#5319c6] selection:text-white" dir={isRTL ? "rtl" : "ltr"}>
+    <div ref={containerRef} className="bg-[#020205] min-h-screen text-white selection:bg-[#ff2c34] selection:text-white" dir={isRTL ? "rtl" : "ltr"}>
       <Navbar />
 
       {/* ==========================================
-          1. HERO SECTION
+          1. HERO SECTION (Flashlight Effect)
           ========================================== */}
-      <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Parallax Layer */}
-        <div ref={parallaxRef} className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#04040a]/50 to-[#04040a] z-10 pointer-events-none" />
-          <div className="w-full h-full opacity-60 mix-blend-screen overflow-hidden object-cover scale-110">
-            {/* Using Spline for abstract tech/energy background */}
-            <Spline scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" />
-          </div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(83,25,198,0.2)_0%,_rgba(0,0,0,0.8)_100%)] z-10 pointer-events-none" />
+      <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden bg-[#020205]">
+        {/* Cinematic Mouse Following Glow Mask */}
+        <div 
+           className="absolute inset-0 pointer-events-none z-20 transition-opacity duration-300"
+           style={{
+             background: `radial-gradient(1200px circle at ${mousePos.x}px ${mousePos.y}px, rgba(83,25,198,0.15), transparent 40%)`
+           }}
+        />
+
+        <div className="absolute inset-0 opacity-40 mix-blend-screen overflow-hidden">
+          <Spline scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" />
         </div>
 
-        {/* Text Content */}
-        <div ref={textRef} className="relative z-20 max-w-5xl mx-auto px-6 text-center mt-20">
-          <span className="hero-stgr block text-sm font-bold uppercase tracking-[0.4em] text-[#ff2c34] mb-6 flex justify-center items-center gap-4">
-            <span className="w-12 h-px bg-[#ff2c34]"></span>
-            {isRTL ? "محفظة أعمالنا" : "Portfolio"}
-            <span className="w-12 h-px bg-[#ff2c34]"></span>
-          </span>
-          <h1 className="hero-stgr text-5xl md:text-7xl lg:text-8xl font-black leading-[1.1] tracking-tighter mb-8 drop-shadow-2xl">
-            {isRTL ? "مشاريعنا" : "Nos Projets"}<br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5319c6] to-[#ff2c34]">
-               {isRTL ? "المتميزة" : "Marquants"}
-            </span>
-          </h1>
-          <p className="hero-stgr text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed font-light">
-            {isRTL
-              ? "اكتشفوا إنجازاتنا وتدخلاتنا في مجالات البناء والتقنية بأعلى معايير الجودة المعتمدة."
-              : "Découvrez nos réalisations et nos interventions dans tous nos domaines d’expertise, conçues pour durer."}
-          </p>
-          <div className="hero-stgr flex items-center justify-center">
-             <button
-               onClick={() => {
-                 document.getElementById('gallery-section')?.scrollIntoView({ behavior: 'smooth' });
-               }}
-               className="group relative px-10 py-5 bg-black/50 overflow-hidden backdrop-blur-md rounded-sm border border-[#5319c6]/50 hover:border-[#ff2c34] transition-colors duration-500"
-             >
-               <div className="absolute inset-0 w-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,44,52,0.3)_50%,transparent_100%)] animate-[shimmer_2s_infinite] opacity-0 group-hover:opacity-100 transition-opacity"></div>
-               <span className="relative text-white font-bold tracking-widest uppercase text-sm z-10">
-                 {isRTL ? "تصفح المشاريع" : "Parcourir la galerie"}
-               </span>
-             </button>
-          </div>
+        <div className="relative z-30 flex flex-col items-center text-center px-6">
+           <div className="inline-block px-4 py-1.5 border border-[#5319c6]/50 rounded-full mb-8 backdrop-blur-md opacity-0 animate-[fadeIn_1s_ease_1s_forwards]">
+             <span className="text-xs font-bold uppercase tracking-widest text-[#a080ff] drop-shadow-lg">
+               {isRTL ? "معرض الإنجازات" : "Galerie d'excellence"}
+             </span>
+           </div>
+           
+           <h1 className="text-6xl md:text-8xl lg:text-[10rem] font-black uppercase tracking-tighter leading-none mb-6 perspective-1000">
+             {renderSplitText(isRTL ? "المشاريع" : "PROJETS")}
+           </h1>
+           
+           <p className="text-xl md:text-2xl text-gray-400 font-light max-w-2xl opacity-0 animate-[fadeInUp_1s_ease_2s_forwards]">
+             {isRTL 
+               ? "نحول التحديات الفنية إلى إنجازات مستدامة. استكشف بصمتنا عبر القطاعات."
+               : "Nous transformons les défis techniques en accomplissements durables. Explorez notre empreinte."}
+           </p>
+
+           <div className="absolute bottom-12 opacity-0 animate-[fadeIn_1s_ease_3s_forwards]">
+              <div className="w-[1px] h-16 bg-gradient-to-b from-[#ff2c34] to-transparent mx-auto animate-[pulse_2s_infinite]" />
+           </div>
         </div>
       </section>
 
       {/* ==========================================
-          2. FILTER & GALLERY SECTION
+          2. STATS & METHODOLOGY (Thinking Out of the Box)
           ========================================== */}
-      <section id="gallery-section" className="relative z-20 pt-20 pb-32 bg-[#04040a]">
+      <section ref={statsRef} className="py-24 bg-gradient-to-b from-[#020205] to-[#0a0a1a] relative border-b border-[#ffffff0a]">
+         <div className="max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+            {t.stats.map((stat, i) => {
+               const numValue = stat.value.replace(/\D/g, "");
+               const suffix = stat.value.replace(/\d/g, "");
+               return (
+                 <div key={i} className="relative group">
+                   <div className="text-5xl md:text-7xl font-black text-transparent mb-4 transition-all duration-500 group-hover:drop-shadow-[0_0_20px_#5319c6]" style={{ WebkitTextStroke: "1px #ffffff50" }}>
+                     <span className="stat-number" data-value={numValue} data-suffix={suffix}>0</span>
+                   </div>
+                   <div className="text-sm md:text-base font-bold text-gray-400 uppercase tracking-widest">
+                     {stat.label}
+                   </div>
+                   <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-[#ff2c34] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                   <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-[#ff2c34] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                 </div>
+               );
+            })}
+         </div>
+
+         {/* Methodology Timeline */}
+         <div className="max-w-7xl mx-auto px-6 lg:px-8 mt-32 text-center">
+            <h2 className="text-3xl font-black mb-16 tracking-widest">{isRTL ? "منهجيتنا" : "NOTRE APPROCHE"}</h2>
+            <div className="flex flex-col md:flex-row justify-between relative">
+               <div className="hidden md:block absolute top-1/2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#5319c6] to-transparent -translate-y-1/2 z-0" />
+               
+               {[
+                 { num: "01", t: isRTL ? "التشخيص" : "Audit", d: isRTL ? "تحليل دقيق للاحتياجات" : "Analyse précise des besoins" },
+                 { num: "02", t: isRTL ? "التصميم" : "Conception", d: isRTL ? "هندسة الحل الفني" : "Ingénierie de la solution" },
+                 { num: "03", t: isRTL ? "التنفيذ" : "Déploiement", d: isRTL ? "إنجاز بأعلى المعايير" : "Exécution sur site" },
+                 { num: "04", t: isRTL ? "التسليم" : "Passation", d: isRTL ? "اختبارات وضمان الجودة" : "Tests et validation finale" },
+               ].map((step, i) => (
+                 <div key={i} className="relative z-10 flex flex-col items-center mb-10 md:mb-0 group cursor-default">
+                    <div className="w-16 h-16 rounded-full bg-[#020205] border-2 border-[#333] group-hover:border-[#ff2c34] flex items-center justify-center mb-6 transition-all duration-300 group-hover:shadow-[0_0_30px_rgba(255,44,52,0.4)]">
+                       <span className="font-black text-xl text-[#5319c6] group-hover:text-[#ff2c34] transition-colors">{step.num}</span>
+                    </div>
+                    <h4 className="text-xl font-bold mb-2 text-white">{step.t}</h4>
+                    <p className="text-xs text-gray-500 uppercase tracking-widest max-w-[150px]">{step.d}</p>
+                 </div>
+               ))}
+            </div>
+         </div>
+      </section>
+
+      {/* ==========================================
+          3. HORIZONTAL SCROLL FEATURED (Projets Phares)
+          ========================================== */}
+      <section ref={horizontalRef} className="bg-black pt-24 pb-12 overflow-hidden h-screen flex flex-col justify-center border-b border-[#ffffff0a]">
+        <div className="px-6 lg:px-12 mb-12">
+           <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter">
+             <span className="text-transparent" style={{ WebkitTextStroke: "1px #fff" }}>
+                {isRTL ? "أبرز" : "Projets"}
+             </span>{" "}
+             {isRTL ? "الإنجازات" : "Phares"}
+           </h2>
+        </div>
+        
+        <div className="flex w-full overflow-hidden">
+           <div ref={horizontalWrapRef} className="flex gap-12 px-6 lg:px-12 w-max">
+             {PROJECT_DATA.slice(0, 3).map((proj, i) => (
+               <div key={i} className="w-[80vw] lg:w-[60vw] h-[60vh] relative rounded-lg overflow-hidden group">
+                 <Image src={proj.image} alt={proj.titleFR} fill className="object-cover transition-transform duration-[2s] group-hover:scale-110" />
+                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-80" />
+                 
+                 <div className={`absolute bottom-0 left-0 w-full p-10 flex flex-col justify-end ${isRTL ? "text-right" : "text-left"}`}>
+                    <div className={`flex items-center gap-4 mb-4 ${isRTL ? "flex-row-reverse" : ""}`}>
+                      <span className="w-12 h-1 bg-[#ff2c34]" />
+                      <span className="text-sm font-bold uppercase tracking-[0.2em]">{proj.category}</span>
+                    </div>
+                    <h3 className="text-4xl lg:text-5xl font-black text-white mb-4 drop-shadow-lg">
+                      {isRTL ? proj.titleAR : proj.titleFR}
+                    </h3>
+                    <p className="text-lg text-gray-300 max-w-2xl mb-8 leading-relaxed">
+                      {isRTL ? proj.challengeFR : proj.challengeFR /* Since no AR trans for challenge provided, keeping FR or leaving it */}
+                    </p>
+                    <button 
+                      onClick={() => setModalProject(proj)}
+                      className="origin-left scale-100 group-hover:scale-105 transition-transform duration-300 self-start px-8 py-3 border border-white hover:bg-white hover:text-black font-bold uppercase text-xs tracking-widest"
+                    >
+                      {isRTL ? "اقرأ دراسة الحالة" : "Lire l'étude de cas"}
+                    </button>
+                 </div>
+               </div>
+             ))}
+           </div>
+        </div>
+      </section>
+
+      {/* ==========================================
+          4. THE LAB / FILTERED GALLERY (3D Mouse Tracking)
+          ========================================== */}
+      <section className="relative z-20 pt-32 pb-32 bg-[#020205]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           
-          {/* Filters */}
-          <div ref={filterBtnRef} className="flex flex-wrap items-center justify-center gap-3 mb-16 px-4">
-            {CATEGORIES.map((cat) => {
-              const isActive = filter === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => handleFilterChange(cat.id)}
-                  disabled={isChanging}
-                  className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 border ${
-                    isActive 
-                      ? "bg-[#5319c6] border-[#5319c6] text-white shadow-[0_0_20px_rgba(83,25,198,0.4)]" 
-                      : "bg-transparent border-[#ffffff20] text-gray-400 hover:border-[#ff2c34] hover:text-white"
-                  }`}
-                >
-                  {isRTL ? cat.labelAR : cat.labelFR}
-                </button>
-              );
-            })}
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-black uppercase tracking-widest mb-10">
+              {isRTL ? "أرشيف المشاريع" : "Archives des réalisations"}
+            </h2>
+            {/* Filters */}
+            <div className="flex flex-wrap items-center justify-center gap-3 px-4">
+              {CATEGORIES.map((cat) => {
+                const isActive = filter === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => handleFilterChange(cat.id)}
+                    disabled={isChanging}
+                    className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 border ${
+                      isActive 
+                        ? "bg-[#5319c6] border-[#5319c6] text-white shadow-[0_0_20px_rgba(83,25,198,0.4)]" 
+                        : "bg-[#0a0a1a] border-[#ffffff10] text-gray-400 hover:border-[#ff2c34] hover:text-white"
+                    }`}
+                  >
+                    {isRTL ? cat.labelAR : cat.labelFR}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          {/* Grid */}
-          <div ref={gridWrapRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[500px]">
+          {/* 3D Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10 lg:gap-16 perspective-1000">
             {displayedProjects.length === 0 ? (
-               <div className="col-span-full py-20 text-center text-gray-500 text-lg">
+               <div className="col-span-full py-20 text-center text-gray-500 font-light">
                  {isRTL ? "لا توجد مشاريع في هذه الفئة حاليا." : "Aucun projet trouvé pour cette catégorie."}
                </div>
             ) : (
               displayedProjects.map((proj) => (
                 <div
                   key={proj.id}
-                  className="project-card group relative h-[450px] w-full bg-[#0a0a1a] rounded-xl overflow-hidden cursor-pointer shadow-lg will-change-transform"
+                  onMouseMove={(e) => handleCardMouseMove(e, e.currentTarget as HTMLDivElement)}
+                  onMouseLeave={(e) => handleCardMouseLeave(e.currentTarget as HTMLDivElement)}
+                  onClick={() => setModalProject(proj)}
+                  className="project-card-3d group relative aspect-[4/3] w-full bg-[#0a0a1a] cursor-pointer shadow-2xl transition-all duration-300 border border-[#ffffff0a] hover:border-[#5319c6]"
                 >
-                  {/* Background Image */}
-                  <div className="absolute inset-0 transition-transform duration-1000 ease-out group-hover:scale-110">
-                    <Image
-                      src={proj.image}
-                      alt={proj.titleFR}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
+                  <div className="absolute inset-0 overflow-hidden">
+                    <Image src={proj.image} alt={proj.titleFR} fill className="object-cover transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 50vw" />
                   </div>
                   
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent transition-opacity duration-500 opacity-90 group-hover:opacity-70" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#5319c6]/80 to-transparent opacity-0 group-hover:opacity-60 transition-opacity duration-500 mix-blend-multiply" />
-                  
-                  {/* Glow Border on Hover */}
-                  <div className="absolute inset-0 border-2 border-transparent transition-colors duration-500 group-hover:border-[#ff2c34] rounded-xl z-20 pointer-events-none shadow-[inset_0_0_20px_rgba(255,44,52,0)] group-hover:shadow-[inset_0_0_20px_rgba(255,44,52,0.5)]" />
-
-                  {/* Content Container */}
-                  <div className="absolute inset-0 p-8 flex flex-col justify-end z-30 pointer-events-none">
-                    {/* Tag */}
-                    <div className="mb-4 transform transition-transform duration-500 translate-y-4 group-hover:translate-y-0">
-                      <span className="px-3 py-1 bg-[#ff2c34] text-white text-[10px] font-black uppercase tracking-widest rounded-sm">
+                  {/* Glassmorphism Information Plate */}
+                  <div className={`absolute bottom-6 ${isRTL ? "right-6 left-12" : "left-6 right-12"} p-6 bg-black/40 backdrop-blur-md border border-white/10 opacity-90 group-hover:opacity-100 group-hover:-translate-y-2 transition-all duration-500`}>
+                    <div className={`flex items-center gap-3 mb-2 ${isRTL ? "flex-row-reverse" : ""}`}>
+                      <span className="w-2 h-2 rounded-full bg-[#ff2c34]" />
+                      <span className="text-[10px] text-[#ff2c34] font-black uppercase tracking-[0.2em]">
                         {proj.tag}
                       </span>
                     </div>
-                    {/* Title */}
-                    <h3 className="text-2xl font-black text-white leading-tight mb-2 drop-shadow-md transform transition-transform duration-500 translate-y-4 group-hover:translate-y-0">
+                    <h3 className={`text-xl font-black text-white leading-tight ${isRTL ? "text-right" : "text-left"}`}>
                       {isRTL ? proj.titleAR : proj.titleFR}
                     </h3>
-                    {/* Desc */}
-                    <p className="text-sm text-gray-300 leading-relaxed mb-4 line-clamp-2 transform transition-all duration-500 translate-y-6 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
-                      {isRTL ? proj.descAR : proj.descFR}
-                    </p>
-                    {/* Meta */}
-                    <div className="flex items-center gap-2 mt-auto transform transition-transform duration-500 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                        <circle cx="12" cy="10" r="3" />
-                      </svg>
-                      <span className="text-xs text-gray-400 font-medium tracking-wider">{proj.meta}</span>
-                    </div>
                   </div>
+
+                  {/* Corner Accent */}
+                  <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-[#ff2c34] to-transparent opacity-0 group-hover:opacity-80 transition-opacity duration-300" />
                 </div>
               ))
             )}
@@ -365,57 +481,79 @@ export default function ProjectsClient() {
       </section>
 
       {/* ==========================================
-          3. FEATURED PROJECT HIGHLIGHT (Optional key project)
+          5. MODAL / DETAILED CASE STUDY
           ========================================== */}
-      <section className="relative py-32 bg-black overflow-hidden flex items-center min-h-[80vh]">
-        <div className="absolute inset-0 z-0">
-          <Image
-             src="https://images.unsplash.com/photo-1541888086225-ee8269d4d9de?auto=format&fit=crop&w=1920&q=80"
-             alt="Featured Project"
-             fill
-             className="object-cover opacity-20"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent" />
-        </div>
-        
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 w-full">
-          <div className="w-full lg:w-1/2">
-             <div className="inline-block px-4 py-1.5 border border-[#5319c6] text-[#5319c6] font-bold text-xs uppercase tracking-[0.2em] rounded-full mb-6 relative overflow-hidden group/tag">
-                <span className="relative z-10">Projet Phare</span>
-                <div className="absolute inset-0 bg-[#5319c6]/20 animate-pulse"></div>
-             </div>
-             
-             <h2 className="text-5xl lg:text-7xl font-black text-white mb-8 leading-tight">
-               {isRTL ? "مجمع صناعي مستدام" : "Complexe Industriel Durable"}
-             </h2>
-             
-             <p className="text-xl text-gray-300 mb-8 leading-relaxed max-w-lg">
-               {isRTL 
-                 ? "تدخل كامل لجميع الحرف: الكهرباء ذات الجهد العالي والمنخفض، التكييف المركزي، وشبكات مكافحة الحرائق." 
-                 : "Intervention complète tous corps d'état: CFO/CFA, CVC industriel centralisé, et réseaux plomberie lourds."
-               }
-             </p>
-             
-             <button className="px-8 py-4 bg-white text-black font-bold uppercase text-sm tracking-widest hover:bg-[#ff2c34] hover:text-white transition-colors duration-300 rounded-sm">
-               {isRTL ? "عرض دراسة الحالة" : "Voir l'étude de cas"}
-             </button>
+      {modalProject && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/90 backdrop-blur-xl" onClick={() => setModalProject(null)} />
+          <div className="relative z-10 w-full max-w-5xl bg-[#0a0a1a] max-h-[90vh] overflow-y-auto border border-[#ffffff10] flex flex-col md:flex-row shadow-[0_0_50px_rgba(83,25,198,0.3)] animate-[fadeInUp_0.4s_ease-out]">
+            
+            {/* Close Btn */}
+            <button 
+              className="absolute top-4 right-4 z-50 p-2 bg-black rounded-full border border-[#ffffff20] hover:bg-[#ff2c34] transition-colors"
+              onClick={() => setModalProject(null)}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+
+            {/* Modal Image */}
+            <div className="w-full md:w-1/2 h-[300px] md:h-auto relative">
+              <Image src={modalProject.image} alt="Project" fill className="object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a0a1a] hidden md:block" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a1a] to-transparent block md:hidden" />
+            </div>
+
+            {/* Modal Content */}
+            <div className={`w-full md:w-1/2 p-10 lg:p-14 flex flex-col justify-center ${isRTL ? "text-right" : "text-left"}`}>
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#ff2c34] mb-4">
+                {modalProject.category}
+              </span>
+              <h2 className="text-3xl lg:text-4xl font-black mb-8">
+                {isRTL ? modalProject.titleAR : modalProject.titleFR}
+              </h2>
+              
+              <div className="space-y-6">
+                <div>
+                  <h4 className="text-[#5319c6] font-bold uppercase tracking-widest text-xs mb-2">{isRTL ? "التحدي" : "Le Challenge"}</h4>
+                  <p className="text-sm text-gray-300 leading-relaxed font-light">{modalProject.challengeFR}</p>
+                </div>
+                <div>
+                  <h4 className="text-[#5319c6] font-bold uppercase tracking-widest text-xs mb-2">{isRTL ? "الحل المقدم" : "Notre Solution"}</h4>
+                  <p className="text-sm text-gray-300 leading-relaxed font-light">{modalProject.solutionFR}</p>
+                </div>
+                <div>
+                  <h4 className="text-[#5319c6] font-bold uppercase tracking-widest text-xs mb-2">{isRTL ? "الأثر" : "L'Impact"}</h4>
+                  <p className="text-sm text-[#ff2c34] font-medium leading-relaxed">{modalProject.impactFR}</p>
+                </div>
+              </div>
+
+              <div className={`mt-10 flex items-center justify-between border-t border-[#ffffff10] pt-6 ${isRTL ? "flex-row-reverse" : ""}`}>
+                 <div className="text-xs text-gray-400">
+                    <span className="block font-bold text-white mb-1">{isRTL ? "العميل" : "Client"}</span>
+                    {modalProject.client}
+                 </div>
+                 <div className="text-xs text-gray-400">
+                    <span className="block font-bold text-white mb-1">{isRTL ? "المدة" : "Durée"}</span>
+                    {modalProject.duration}
+                 </div>
+              </div>
+            </div>
+
           </div>
         </div>
-        
-        {/* Subtle decorative elements */}
-        <div className="absolute bottom-0 right-0 w-1/2 h-full pointer-events-none flex justify-end items-end opacity-30">
-           <svg viewBox="0 0 200 200" className="w-[800px] h-[800px] absolute -right-40 -bottom-40 text-[#5319c6] animate-[spin_60s_linear_infinite]">
-              <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="4 8" />
-              <circle cx="100" cy="100" r="70" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 4" />
-           </svg>
-        </div>
-      </section>
+      )}
 
       {/* ==========================================
-          4. CTA & FOOTER
+          6. CTA & FOOTER
           ========================================== */}
       <CTA />
       <Footer />
+
+      <style jsx global>{`
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes shimmer { 100% { transform: translateX(100%); } }
+      `}</style>
     </div>
   );
 }
