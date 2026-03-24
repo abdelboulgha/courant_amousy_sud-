@@ -1,425 +1,338 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Spline from "@splinetool/react-spline";
-
+import { useLang } from "@/contexts/LanguageContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CTA from "@/components/CTA";
-import { useLang } from "@/contexts/LanguageContext";
 
-if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 // ==========================================
-// DOCK DATA
+// DATASET
 // ==========================================
-const HISTORY_DATA = [
+const VALUES_DATA = [
   {
-    year: "2010",
-    titleFR: "Fondation",
-    titleAR: "التأسيس",
-    descFR: "Création de la société avec une équipe fondatrice de 5 ingénieurs spécialisés en électricité industrielle.",
-    descAR: "تأسيس الشركة مع فريق مؤسس من 5 مهندسين متخصصين في الكهرباء الصناعية.",
+    id: 1,
+    titleFR: "FIABILITÉ",
+    titleAR: "الموثوقية",
+    subtitleFR: "Zéro compromis sur la qualité",
+    subtitleAR: "لا مساومة على الجودة",
+    image: "https://images.unsplash.com/photo-1541888086225-ee8269d4d9de?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 2,
+    titleFR: "EXPERTISE",
+    titleAR: "الخبرة",
+    subtitleFR: "10 ans d'ingénierie de pointe",
+    subtitleAR: "10 سنوات من الهندسة المتقدمة",
     image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=800&q=80",
   },
   {
-    year: "2015",
-    titleFR: "Expansion Multiservices",
-    titleAR: "التوسع متعدد الخدمات",
-    descFR: "Lancement des départements Plomberie et Climatisation (CVC) pour offrir une solution globale clé en main.",
-    descAR: "إطلاق أقسام السباكة والتكييف لتقديم حلول شاملة ومتكاملة.",
+    id: 3,
+    titleFR: "INNOVATION",
+    titleAR: "الابتكار",
+    subtitleFR: "Technologies de demain, aujourd'hui",
+    subtitleAR: "تكنولوجيا الغد، اليوم",
+    image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 4,
+    titleFR: "RÉACTIVITÉ",
+    titleAR: "الاستجابة",
+    subtitleFR: "Interventions rapides 24/7",
+    subtitleAR: "تدخلات سريعة 24/7",
     image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80",
   },
-  {
-    year: "2019",
-    titleFR: "Pôle Sécurité Technologique",
-    titleAR: "قطب الأمن التكنولوجي",
-    descFR: "Intégration de la vidéosurveillance HD et des systèmes d'alarme maillés aux standards européens.",
-    descAR: "دمج أنظمة المراقبة بالفيديو عالية الدقة وأنظمة الإنذار وفق المعايير الأوروبية.",
-    image: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    year: "2024",
-    titleFR: "Acteur Régional Majeur",
-    titleAR: "فاعل إقليمي رئيسي",
-    descFR: "Plus de 500 projets livrés. Certification d'excellence sur les gros œuvres et développement continu.",
-    descAR: "أكثر من 500 مشروع تم إنجازه. شهادة التميز في الأعمال الكبرى والتطوير المستمر.",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80",
-  },
+];
+
+const HISTORY_DATA = [
+  { year: "2010", titleFR: "L'Étincelle", descFR: "Naissance de CAS avec une vision audacieuse." },
+  { year: "2015", titleFR: "Expansion", descFR: "Déploiement des pôles Plomberie & CVC." },
+  { year: "2019", titleFR: "Technologie", descFR: "Intégration de la cybersécurité & domotique." },
+  { year: "2024", titleFR: "Excellence", descFR: "Plus de 500 projets livrés avec succès." },
 ];
 
 const TEAM_DATA = [
-  {
-    name: "Youssef Amrani",
-    roleFR: "Directeur Général (CEO)",
-    roleAR: "المدير العام",
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    name: "Amina Tazi",
-    roleFR: "Directrice Technique",
-    roleAR: "المديرة الفنية",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    name: "Driss Kabbaj",
-    roleFR: "Chef des Opérations",
-    roleAR: "رئيس العمليات",
-    image: "https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&fit=crop&w=800&q=80",
-  },
+  { name: "Youssef Amrani", role: "CEO", img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80" },
+  { name: "Amina Tazi", role: "CTO", img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80" },
+  { name: "Driss Kabbaj", role: "COO", img: "https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&fit=crop&w=800&q=80" },
+  { name: "Sara Benali", role: "CFO", img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=800&q=80" },
 ];
 
-export default function AboutClient() {
-  const { t, isRTL } = useLang();
-  
-  const heroRef = useRef<HTMLDivElement>(null);
-  const heroTextRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const lineRef = useRef<SVGPathElement>(null);
-  const valuesRef = useRef<HTMLDivElement>(null);
-  const marqueeRef = useRef<HTMLDivElement>(null);
 
-  // Hero & Global animations
+export default function AboutClient() {
+  const { isRTL } = useLang();
+  
+  const containerRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const maskRef = useRef<HTMLDivElement>(null);
+  const horizontalRef = useRef<HTMLDivElement>(null);
+  const horizontalWrapRef = useRef<HTMLDivElement>(null);
+  
+  // Custom Cursor for Values
+  const [hoveredValue, setHoveredValue] = useState<number | null>(null);
+
+  useEffect(() => {
+    const handleGlobalMouse = (e: globalThis.MouseEvent) => {
+      // Smooth lerp for cursor would be better with GSAP, let's use quickTo
+      gsap.to(".cursor-image-reveal", {
+        x: e.clientX,
+        y: e.clientY,
+        duration: 0.4,
+        ease: "power3.out"
+      });
+    };
+    window.addEventListener("mousemove", handleGlobalMouse);
+    return () => window.removeEventListener("mousemove", handleGlobalMouse);
+  }, []);
+
+  // Main GSAP Animations
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. Hero Cinematic Pin & Scrub
+
+      // 1. HERO MASSIVE SCALE (Scrollytelling "Through the Eye")
       ScrollTrigger.create({
         trigger: heroRef.current,
         start: "top top",
-        end: "+=60%",
+        end: "+=150%",
         pin: true,
         scrub: 1,
-        animation: gsap.to(heroTextRef.current, {
-          y: -150,
-          scale: 0.9,
+        animation: gsap.to(maskRef.current, {
+          scale: 30, // Explode the mask to reveal next section naturally
           opacity: 0,
-          ease: "power2.inOut",
+          ease: "power2.in",
         }),
       });
 
-      // 2. Timeline SVG Draw Animation
-      if (lineRef.current && timelineRef.current) {
-        const pathLength = lineRef.current.getTotalLength();
-        gsap.set(lineRef.current, { strokeDasharray: pathLength, strokeDashoffset: pathLength });
-        
-        gsap.to(lineRef.current, {
-          strokeDashoffset: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: timelineRef.current,
-            start: "top 60%",
-            end: "bottom 80%",
-            scrub: 1,
-          },
-        });
-      }
-
-      // 3. Timeline Cards Slide-in
-      const historyItems = gsap.utils.toArray(".history-item");
-      historyItems.forEach((item: unknown, i) => {
-        const historyItem = item as HTMLElement;
-        const isLeft = i % 2 === 0;
-        gsap.fromTo(
-          historyItem,
-          { opacity: 0, x: isLeft ? -80 : 80, scale: 0.95 },
-          {
-            opacity: 1,
-            x: 0,
-            scale: 1,
-            duration: 1.2,
-            ease: "back.out(1.2)",
-            scrollTrigger: {
-              trigger: historyItem,
-              start: "top 85%",
-            },
-          }
-        );
+      // 2. PARALLAX TEXT IN SPLIT SECTION
+      gsap.to(".parallax-text", {
+        yPercent: -50,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".split-section",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        }
       });
 
-      // 4. Mission & Values Cards Floating Stagger
-      gsap.fromTo(
-        ".value-card",
-        { y: 80, opacity: 0, rotationX: 15 },
-        {
-          y: 0,
-          opacity: 1,
-          rotationX: 0,
-          duration: 1,
-          stagger: 0.15,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: valuesRef.current,
-            start: "top 75%",
-          },
-        }
-      );
-
-      // 5. Team Reveal
-      gsap.fromTo(
-        ".team-card",
-        { y: 60, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          stagger: 0.2,
-          ease: "back.out(1.5)",
-          scrollTrigger: {
-            trigger: ".team-section",
-            start: "top 80%",
-          },
-        }
-      );
-
-      // 6. Infinite Marquee
-      if (marqueeRef.current) {
-        const w = marqueeRef.current.offsetWidth / 2;
-        gsap.to(marqueeRef.current, {
-          x: -w,
-          duration: 30, // Extremely slow and elegant
+      // 3. HORIZONTAL SCROLL (The Journey tape)
+      if (horizontalRef.current && horizontalWrapRef.current) {
+        // Calculate dynamic width based on children
+        const wrapWidth = horizontalWrapRef.current.scrollWidth;
+        const windowWidth = window.innerWidth;
+        
+        gsap.to(horizontalWrapRef.current, {
+          x: -(wrapWidth - windowWidth + windowWidth*0.1), // move left
           ease: "none",
-          repeat: -1,
+          scrollTrigger: {
+            trigger: horizontalRef.current,
+            start: "top top",
+            end: () => "+=" + wrapWidth,
+            pin: true,
+            scrub: 1,
+          }
         });
       }
-    });
 
+    }, containerRef);
     return () => ctx.revert();
   }, []);
 
   return (
-    <div className="bg-[#04040a] min-h-screen text-white overflow-hidden selection:bg-[#5319c6] selection:text-white" dir={isRTL ? "rtl" : "ltr"}>
+    <div ref={containerRef} className="bg-[#020205] min-h-screen text-white overflow-hidden selection:bg-[#ff2c34]" dir={isRTL ? "rtl" : "ltr"}>
       <Navbar />
 
       {/* ==========================================
-          1. HERO SECTION (Spline 3D + Cinematic Reveal)
+          1. HERO (Brutalist Exploding Mask)
           ========================================== */}
-      <section ref={heroRef} className="relative h-screen flex flex-col justify-center items-center">
-        {/* Spline Background */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#04040a]/40 to-[#04040a] z-10 pointer-events-none" />
-          <div className="w-full h-full opacity-50 mix-blend-screen scale-110">
-            {/* Same premium energy visual */}
-            <Spline scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" />
-          </div>
-        </div>
-
-        {/* Floating Particles CSS Background (Custom Glows) */}
-        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-30">
-          <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-[#5319c6] rounded-full blur-[150px] mix-blend-screen animate-[pulse_4s_ease-in-out_infinite_alternate]" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#ff2c34] rounded-full blur-[150px] mix-blend-screen animate-[pulse_5s_ease-in-out_infinite_alternate_1s]" />
-        </div>
-
-        {/* Text Area */}
-        <div ref={heroTextRef} className="relative z-20 max-w-5xl mx-auto px-6 text-center mt-12 backdrop-blur-sm bg-black/10 p-10 rounded-2xl border border-white/5">
-           <div className="inline-block px-5 py-2 border border-[#ff2c34]/50 rounded-full mb-8 shadow-[0_0_20px_rgba(255,44,52,0.2)] animate-[fadeIn_1s_ease_forwards]">
-             <span className="text-xs font-black uppercase tracking-[0.3em] text-[#ff2c34]">
-               {t.about.badge}
-             </span>
-           </div>
-           
-           <h1 className="text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-tight lg:leading-[0.9] mb-8 animate-[fadeInUp_1.5s_ease_0.2s_forwards] opacity-0">
-             {isRTL ? "من نحن" : "L'Expertise"}<br/>
-             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5319c6] to-white drop-shadow-2xl">
-               {isRTL ? "طاقة وابتكار" : "Courant Amousy"}
-             </span>
-           </h1>
-           
-           <p className="text-lg md:text-2xl text-gray-400 font-light max-w-3xl mx-auto leading-relaxed animate-[fadeInUp_1.5s_ease_0.4s_forwards] opacity-0">
-             {isRTL
-               ? "نلتزم بتقديم حلول تقنية موثوقة وحديثة ومستدامة لعملائنا في مجالات البناء والهندسة."
-               : "Expertise, fiabilité et innovation. Nous fournissons des solutions techniques fiables, modernes et durables."}
-           </p>
-
-           <div className="mt-12 animate-[fadeInUp_1.5s_ease_0.6s_forwards] opacity-0">
-             <Link
-               href="/contact"
-               className="group relative inline-flex items-center justify-center px-10 py-5 bg-white text-black overflow-hidden font-bold uppercase tracking-widest text-sm rounded-sm transition-transform hover:scale-105"
-             >
-               <span className="absolute inset-0 bg-[#ff2c34] transform scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
-               <span className="relative z-10 transition-colors duration-500 group-hover:text-white">
-                 {isRTL ? "تواصل معنا" : "Contactez-nous"}
-               </span>
-             </Link>
-           </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 animate-bounce pointer-events-none opacity-50">
-           <div className="w-[1px] h-16 bg-gradient-to-b from-[#5319c6] to-transparent"></div>
-        </div>
-      </section>
-
-      {/* ==========================================
-          2. THE STORY / COMPANY HISTORY (Timeline)
-          ========================================== */}
-      <section ref={timelineRef} className="relative z-20 py-32 bg-[#04040a]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          
-          <div className="text-center mb-20">
-            <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-widest text-[#5319c6] mb-6 drop-shadow-[0_0_15px_rgba(83,25,198,0.5)]">
-              {isRTL ? "تاريخنا" : "Notre Histoire"}
-            </h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-              {isRTL ? "رحلة من النمو المستمر والإنجازات البارزة." : "Un parcours fait de croissance continue et de jalons remarquables."}
-            </p>
-          </div>
-
-          <div className="relative">
-             {/* Center SVG Line for Timeline */}
-             <div className="absolute top-0 bottom-0 left-[20px] md:left-1/2 md:-translate-x-1/2 w-[4px] z-0">
-                <svg className="h-full w-full" preserveAspectRatio="none">
-                   <path
-                     ref={lineRef}
-                     d={`M 2 0 L 2 10000`} // Abstract large height, scaled by container
-                     stroke="url(#timeline-grad)"
-                     strokeWidth="4"
-                     fill="none"
-                   />
-                   <defs>
-                     <linearGradient id="timeline-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                       <stop offset="0%" stopColor="#5319c6" />
-                       <stop offset="50%" stopColor="#ff2c34" />
-                       <stop offset="100%" stopColor="#5319c6" />
-                     </linearGradient>
-                   </defs>
-                </svg>
-             </div>
-
-             <div className="space-y-16 md:space-y-32">
-               {HISTORY_DATA.map((item, i) => {
-                 const isLeft = i % 2 === 0;
-                 return (
-                   <div key={i} className={`history-item relative flex flex-col md:flex-row items-center justify-between w-full ${isLeft ? "md:flex-row" : "md:flex-row-reverse"}`}>
-                      
-                      {/* Timeline Dot */}
-                      <div className="absolute left-[20px] md:left-1/2 transform -translate-x-1/2 w-6 h-6 rounded-full bg-[#04040a] border-4 border-[#ff2c34] z-10 shadow-[0_0_15px_#ff2c34]" />
-
-                      {/* Content Card */}
-                      <div className={`w-full md:w-[45%] pl-16 md:pl-0 ${isRTL ? (isLeft ? "md:text-right" : "md:text-left") : (isLeft ? "md:text-right" : "md:text-left")}`}>
-                        <div className="mb-2 text-5xl font-black text-transparent opacity-50" style={{ WebkitTextStroke: "1px #5319c6" }}>
-                          {item.year}
-                        </div>
-                        <h3 className="text-3xl font-bold mb-4 text-white">
-                          {isRTL ? item.titleAR : item.titleFR}
-                        </h3>
-                        <p className="text-gray-400 text-lg leading-relaxed">
-                          {isRTL ? item.descAR : item.descFR}
-                        </p>
-                      </div>
-
-                      {/* Image Card */}
-                      <div className="w-full md:w-[45%] pl-16 md:pl-0 mt-8 md:mt-0">
-                        <div className="relative aspect-[16/9] rounded-xl overflow-hidden shadow-2xl border border-[#ffffff10] group">
-                           <Image src={item.image} alt={item.titleFR} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
-                           <div className="absolute inset-0 bg-black/30 group-hover:bg-transparent transition-colors duration-500" />
-                        </div>
-                      </div>
-                   </div>
-                 );
-               })}
-             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ==========================================
-          3. MISSION & VALUES (Glassmorphism Cards)
-          ========================================== */}
-      <section ref={valuesRef} className="py-32 relative bg-gradient-to-b from-[#04040a] to-[#0a0a1a] border-t border-b border-[#ffffff0a]">
-         <div className="absolute inset-0 bg-[url('/assets/images/noise.png')] opacity-[0.03] mix-blend-overlay pointer-events-none" />
-         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-20">
-               <span className="text-[#ff2c34] font-black uppercase tracking-[0.3em] text-sm block mb-4">
-                 {isRTL ? "جذورنا" : "Notre ADN"}
-               </span>
-               <h2 className="text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-tight max-w-4xl mx-auto">
-                 {isRTL 
-                   ? "توفير حلول تقنية موثوقة وحديثة ومستدامة لعملائنا." 
-                   : "Fournir des solutions techniques fiables, modernes et durables à nos clients."}
-               </h2>
-            </div>
-            
-            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6`}>
-               {t.about.vals.map((val, i) => (
-                 <div key={i} className="value-card group relative p-10 bg-[#020205]/50 backdrop-blur-xl border border-white/5 rounded-2xl hover:border-[#5319c6] transition-all duration-500 hover:-translate-y-4 hover:shadow-[0_20px_40px_rgba(83,25,198,0.2)]">
-                   <div className="absolute top-0 right-0 w-24 h-24 bg-[#5319c6] rounded-full blur-[50px] opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
-                   
-                   <div className={`flex items-center gap-4 mb-8 ${isRTL ? "flex-row-reverse" : ""}`}>
-                      <span className="text-4xl font-black text-transparent" style={{ WebkitTextStroke: "1px #ff2c34" }}>{val.num}</span>
-                      <div className="h-px w-10 bg-gradient-to-r from-[#ff2c34] to-transparent" />
-                   </div>
-                   
-                   <h3 className={`text-2xl font-black text-white mb-4 ${isRTL ? "text-right" : "text-left"}`}>{val.title}</h3>
-                   <p className={`text-gray-400 text-sm leading-relaxed ${isRTL ? "text-right" : "text-left"}`}>{val.desc}</p>
-                 </div>
-               ))}
-            </div>
-         </div>
-      </section>
-
-      {/* ==========================================
-          4. SERVICES MARQUEE (High-end showcase)
-          ========================================== */}
-      <section className="py-16 bg-[#04040a] relative overflow-hidden flex items-center shadow-[inset_0_0_100px_rgba(0,0,0,1)]">
-        <div className="absolute top-0 left-0 bottom-0 w-32 bg-gradient-to-r from-[#04040a] to-transparent z-10" />
-        <div className="absolute top-0 right-0 bottom-0 w-32 bg-gradient-to-l from-[#04040a] to-transparent z-10" />
+      <section ref={heroRef} className="relative h-screen w-full flex items-center justify-center bg-black overflow-hidden perspective-1000">
         
-        <div className="flex w-max" ref={marqueeRef}>
-           {/* Duplicate array twice for seamless infinite loop */}
-           {[...t.ticker, ...t.ticker].map((item, i) => (
-             <div key={i} className="flex items-center px-8">
-                <span className="text-4xl md:text-6xl font-black text-transparent uppercase tracking-tighter whitespace-nowrap hover:text-white transition-colors duration-300 cursor-default" style={{ WebkitTextStroke: "1px rgba(255,255,255,0.2)" }}>
-                   {item}
-                </span>
-                <span className="mx-8 w-4 h-4 rounded-full bg-[#ff2c34] shadow-[0_0_15px_#ff2c34]" />
-             </div>
-           ))}
+        {/* Background that will be revealed */}
+        <div className="absolute inset-0 z-0">
+          <Image src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=1920&q=80" alt="Hero bg" fill className="object-cover opacity-50 grayscale" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#020205] via-[#020205]/40 to-transparent" />
+        </div>
+
+        {/* The Giant Scale Element */}
+        <div ref={maskRef} className="relative z-10 w-full h-full flex flex-col items-center justify-center origin-center">
+          <h1 className="text-[15vw] leading-[0.8] font-black uppercase tracking-tighter mix-blend-overlay text-white drop-shadow-[0_0_30px_rgba(83,25,198,0.8)] filter blur-[0.5px]">
+            COURANT
+          </h1>
+          <h1 className="text-[15vw] leading-[0.8] font-black uppercase tracking-tighter mix-blend-overlay text-[#ff2c34] drop-shadow-[0_0_30px_rgba(255,44,52,0.8)]">
+            AMOUSY
+          </h1>
+          <h1 className="text-[15vw] leading-[0.8] font-black uppercase tracking-tighter mix-blend-overlay text-white drop-shadow-[0_0_30px_rgba(83,25,198,0.8)] filter blur-[0.5px]">
+            SUD
+          </h1>
+        </div>
+
+        {/* Floating intro text */}
+        <div className="absolute bottom-10 left-10 z-20 max-w-sm">
+          <p className="text-xl font-light leading-relaxed animate-[fadeIn_2s_ease_1s_forwards] opacity-0 text-gray-300">
+            {isRTL 
+              ? "نحن لا نبني فقط. نحن نؤسس إرثاً من الطاقة المتطورة." 
+              : "Nous ne faisons pas que construire. Nous forgeons un héritage d'ingénierie avancée."}
+          </p>
         </div>
       </section>
 
       {/* ==========================================
-          5. THE TEAM (Portrait Cards)
+          2. THE PHILOSOPHY (Interactive Hover Lines)
           ========================================== */}
-      <section className="team-section py-32 bg-[#020205] relative border-t border-[#ffffff0a]">
-         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-16">
-               <div className={`max-w-2xl ${isRTL ? "text-right" : "text-left"}`}>
-                  <h2 className="text-4xl lg:text-5xl font-black uppercase text-white mb-6">
-                    {isRTL ? "الفريق المؤسس" : "L'Équipe Dirigeante"}
-                  </h2>
-                  <p className="text-gray-400 text-lg">
-                    {isRTL 
-                      ? "خبراء تقنيون يضعون شغفهم في خدمة نجاح مشاريعكم." 
-                      : "Des experts techniques qui mettent leur passion au service de la réussite de vos projets."}
-                  </p>
+      <section className="relative py-40 bg-[#020205] cursor-crosshair">
+        
+        {/* Floating Mouse Follower Image */}
+        <div 
+          className="cursor-image-reveal fixed top-0 left-0 w-[400px] h-[500px] pointer-events-none z-0 transform -translate-x-1/2 -translate-y-1/2 overflow-hidden transition-opacity duration-500 rounded-3xl"
+          style={{ opacity: hoveredValue !== null ? 1 : 0 }}
+        >
+          {hoveredValue !== null && (
+            <>
+              <Image 
+                src={VALUES_DATA[hoveredValue].image} 
+                alt="Value Image" 
+                fill 
+                className="object-cover scale-110 animate-[slowZoom_5s_infinite_alternate]" 
+              />
+              <div className="absolute inset-0 bg-[#5319c6]/20 mix-blend-multiply" />
+            </>
+          )}
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10 mix-blend-difference">
+          <p className="text-[#ff2c34] font-black uppercase tracking-[0.4em] mb-12 text-sm ml-4 border-l-2 border-[#ff2c34] pl-4">
+            {isRTL ? "فلسفتنا" : "Notre Philosophie"}
+          </p>
+          
+          <div className="flex flex-col w-full border-t border-white/10">
+            {VALUES_DATA.map((val, i) => (
+              <div 
+                key={val.id}
+                onMouseEnter={() => setHoveredValue(i)}
+                onMouseLeave={() => setHoveredValue(null)}
+                className={`group py-8 md:py-12 border-b border-white/10 flex flex-col md:flex-row items-baseline justify-between transition-colors duration-500 hover:bg-white/5 px-4 ${isRTL ? "md:flex-row-reverse" : ""}`}
+              >
+                <div className={`text-5xl md:text-8xl lg:text-[7rem] font-black uppercase tracking-tighter opacity-50 group-hover:opacity-100 transition-opacity duration-300 ${isRTL ? "text-right" : "text-left"}`}>
+                  <span className="text-transparent" style={{ WebkitTextStroke: "1px white" }}>
+                    {isRTL ? val.titleAR : val.titleFR}
+                  </span>
+                </div>
+                <div className={`mt-4 md:mt-0 text-xl font-light tracking-widest text-[#a080ff] opacity-0 group-hover:opacity-100 transform translate-x-10 group-hover:translate-x-0 transition-all duration-500 ease-out ${isRTL ? "text-left" : "text-right"}`}>
+                  {isRTL ? val.subtitleAR : val.subtitleFR}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ==========================================
+          3. SPLIT X-RAY SECTION (Parallax Text vs Image)
+          ========================================== */}
+      <section className="split-section relative bg-[#020205] h-[150vh] overflow-hidden flex items-center">
+        <div className="absolute inset-0 w-full h-full lg:w-1/2 right-0 lg:left-1/2">
+           <Image src="https://images.unsplash.com/photo-1541888086225-ee8269d4d9de?auto=format&fit=crop&w=1920&q=80" alt="Vision" fill className="object-cover opacity-60" />
+           <div className="absolute inset-0 bg-[#5319c6] mix-blend-color opacity-40" />
+           <div className="absolute inset-0 bg-gradient-to-r from-[#020205] via-transparent to-transparent hidden lg:block" />
+           <div className="absolute inset-0 bg-gradient-to-t from-[#020205] via-transparent to-transparent block lg:hidden" />
+        </div>
+        
+        <div className="relative z-10 w-full lg:w-1/2 px-6 lg:px-20">
+           <div className="parallax-text">
+             <h2 className="text-5xl lg:text-7xl font-black mb-8 leading-[1.1] uppercase text-white drop-shadow-2xl">
+               {isRTL ? "رؤية" : "Transparence"} <br/>
+               <span className="text-[#ff2c34]">{isRTL ? "لا متناهية" : "Totale"}</span>
+             </h2>
+             <p className="text-xl text-gray-400 font-light leading-relaxed max-w-xl">
+               {isRTL 
+                 ? "نعتمد الانفتاح والمصداقية في كل مرحلة من مراحل مشاريعنا. فريقنا يعمل في تناغم متكامل لتقديم نتائج استثنائية." 
+                 : "Nous adoptons une démarche d'ouverture et de fiabilité à chaque étape de nos projets. Notre équipe opère dans une harmonie absolue pour livrer un confort esthétique et technique exceptionnel."}
+             </p>
+           </div>
+        </div>
+      </section>
+
+      {/* ==========================================
+          4. HORIZONTAL TIMELINE (Infinite Tape)
+          ========================================== */}
+      <section ref={horizontalRef} className="bg-[#020205] h-screen overflow-hidden flex flex-col justify-center border-t border-b border-[#ffffff0a] relative">
+        <div className="absolute top-20 left-10 pointer-events-none z-20">
+           <p className="text-[#a080ff] font-bold uppercase tracking-[0.5em] text-xs">
+             {isRTL ? "شريط الزمن" : "Notre Parcours"}
+           </p>
+        </div>
+
+        <div className="flex w-full items-center pl-[10vw]">
+           <div ref={horizontalWrapRef} className="flex gap-[15vw] items-center whitespace-nowrap min-w-max">
+             {HISTORY_DATA.map((item, i) => (
+               <div key={i} className="relative flex flex-col items-center justify-center w-[60vw] md:w-[40vw] group">
+                  {/* Giant Background Year */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[30vw] md:text-[20vw] font-black text-transparent opacity-10 select-none z-0 transition-opacity duration-1000 group-hover:opacity-30" style={{ WebkitTextStroke: "2px #5319c6" }}>
+                    {item.year}
+                  </div>
+                  
+                  <div className="relative z-10 text-center">
+                    <div className="w-4 h-4 rounded-full bg-[#ff2c34] mx-auto mb-10 shadow-[0_0_20px_#ff2c34] animate-pulse" />
+                    <h3 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white mb-6 drop-shadow-xl">{item.titleFR}</h3>
+                    <p className="text-xl md:text-2xl text-gray-400 font-light whitespace-normal max-w-lg mx-auto leading-relaxed">
+                      {item.descFR}
+                    </p>
+                  </div>
                </div>
-            </div>
+             ))}
+           </div>
+        </div>
+      </section>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-               {TEAM_DATA.map((member, i) => (
-                 <div key={i} className="team-card group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-crosshair">
-                    <Image src={member.image} alt={member.name} fill className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 grayscale group-hover:grayscale-0" />
-                    
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#020205] via-[#020205]/40 to-transparent opacity-90 group-hover:opacity-60 transition-opacity duration-500" />
-                    
-                    {/* Glow Accents */}
-                    <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[#5319c6] rounded-full blur-[60px] opacity-0 group-hover:opacity-80 transition-opacity duration-700" />
+      {/* ==========================================
+          5. THE TEAM (Accordion Carousel)
+          ========================================== */}
+      <section className="py-40 bg-black relative">
+         <div className="max-w-7xl mx-auto px-6">
+            <h2 className="text-4xl md:text-6xl font-black uppercase text-center mb-20 tracking-tighter">
+              <span className="text-transparent" style={{ WebkitTextStroke: "1px white" }}>
+                {isRTL ? "مكتب" : "Cercle"}
+              </span> {" "}
+              <span className="text-[#ff2c34]">
+                {isRTL ? "القيادة" : "Dirigeant"}
+              </span>
+            </h2>
 
-                    <div className="absolute bottom-0 left-0 w-full p-8 flex flex-col justify-end text-center">
-                       <h3 className="text-3xl font-black text-white mb-2">{member.name}</h3>
-                       <p className="text-[#ff2c34] font-bold uppercase tracking-[0.2em] text-xs">
-                         {isRTL ? member.roleAR : member.roleFR}
-                       </p>
-                    </div>
+            {/* Accordion Flex Layout */}
+            <div className="flex flex-col lg:flex-row w-full h-[80vh] gap-4">
+              {TEAM_DATA.map((member, i) => (
+                <div key={i} className="group relative flex-1 min-h-[100px] hover:flex-[4] transition-[flex] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] rounded-2xl overflow-hidden cursor-crosshair border border-white/5 hover:border-[#5319c6]/50">
+                  <Image src={member.img} alt={member.name} fill className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100" />
+                  
+                  {/* Dark Overlay that fades out slightly on hover */}
+                  <div className="absolute inset-0 bg-black/80 group-hover:bg-gradient-to-t group-hover:from-black group-hover:via-black/20 group-hover:to-transparent transition-all duration-700" />
+                  
+                  {/* Vertical / Horizontal Text depending on state */}
+                  <div className="absolute bottom-10 left-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-200">
+                     <p className="text-[#a080ff] font-bold uppercase tracking-[0.3em] text-xs mb-2">
+                       {member.role}
+                     </p>
+                     <h3 className="text-4xl font-black text-white whitespace-nowrap drop-shadow-xl">
+                       {member.name}
+                     </h3>
+                  </div>
 
-                    {/* Frame overlay */}
-                    <div className="absolute inset-4 border border-white/20 rounded-xl pointer-events-none scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 delay-100" />
-                 </div>
-               ))}
+                  {/* Vertical label for unhovered state */}
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:-rotate-90 opacity-100 group-hover:opacity-0 transition-opacity duration-300">
+                     <h3 className="text-2xl font-black text-white/50 uppercase tracking-widest whitespace-nowrap">
+                       {member.name}
+                     </h3>
+                  </div>
+                </div>
+              ))}
             </div>
          </div>
       </section>
@@ -429,9 +342,9 @@ export default function AboutClient() {
           ========================================== */}
       <CTA />
       <Footer />
-      
+
       <style jsx global>{`
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.15); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
       `}</style>
     </div>
