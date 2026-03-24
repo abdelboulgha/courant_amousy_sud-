@@ -1,9 +1,10 @@
-import ComingSoon from "@/components/ComingSoon";
+import ProjectsClient from "./ProjectsClient";
 
 export const metadata = {
-  title: "Projets | Courant Amousy Sud",
+  title: "Nos Projets | Courant Amousy Sud",
+  description: "Découvrez nos réalisations et interventions dans tous nos domaines d'expertise : Électricité, Plomberie, Climatisation, Vidéosurveillance, et bien plus.",
 };
 
 export default function ProjectsPage() {
-  return <ComingSoon titleKey="projects" />;
+  return <ProjectsClient />;
 }
