@@ -8,10 +8,9 @@ import { useLang } from "@/contexts/LanguageContext";
 
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
-// One Unsplash image per project
 const PROJECT_IMAGES = [
-  "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=75", // residential / electrical
-  "https://images.unsplash.com/photo-1566073771259-470e8a27d08a?auto=format&fit=crop&w=1200&q=75", // hotel lobby / AC
+  "/assets/images/projects/electrical.png", // residential / electrical
+  "/assets/images/projects/ac.png", // hotel lobby / AC
   "https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1200&q=75", // modern villa
   "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=1200&q=75",   // CCTV / security
   "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=1200&q=75", // painting / interior
