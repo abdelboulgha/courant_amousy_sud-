@@ -10,71 +10,72 @@ if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
 export default function CTA() {
   const sectionRef = useRef<HTMLElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const { t, isRTL } = useLang();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
-        trigger: sectionRef.current, start: "top 80%",
-        onEnter: () => gsap.fromTo(contentRef.current, { y: 60, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, scale: 1, duration: 0.9, ease: "back.out(1.3)" }),
+        trigger: sectionRef.current,
+        start: "top 80%",
+        onEnter: () => {
+          gsap.fromTo(innerRef.current?.children ?? [],
+            { y: 40, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "power3.out" }
+          );
+        },
       });
-      gsap.to(glowRef.current, { scale: 1.15, opacity: 0.6, duration: 2.5, ease: "sine.inOut", yoyo: true, repeat: -1 });
     }, sectionRef);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-24 relative overflow-hidden" style={{ background: "#07071a" }}>
-      <div ref={glowRef} className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 60% 60% at 50% 50%, rgba(83,25,198,0.3) 0%, transparent 70%)" }} />
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 40% 40% at 50% 50%, rgba(255,44,52,0.1) 0%, transparent 60%)" }} />
-      <div className="absolute left-0 right-0 top-0 h-px opacity-30"
-        style={{ background: "linear-gradient(90deg, transparent, #5319c6, transparent)" }} />
-      <div className="absolute left-0 right-0 bottom-0 h-px opacity-30"
-        style={{ background: "linear-gradient(90deg, transparent, #ff2c34, transparent)" }} />
+    <section ref={sectionRef} className="py-24" style={{ background: "#5319c6" }} dir={isRTL ? "rtl" : "ltr"}>
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div ref={innerRef} className={`flex flex-col lg:flex-row lg:items-end gap-12 lg:gap-20 ${isRTL ? "lg:flex-row-reverse" : ""}`}>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center" dir={isRTL ? "rtl" : "ltr"}>
-        <div ref={contentRef}>
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-6"
-            style={{ background: "rgba(255,44,52,0.1)", border: "1px solid rgba(255,44,52,0.3)", color: "#f87171" }}>
-            ⚡ {t.cta.badge}
+          {/* Left text */}
+          <div className="flex-1">
+            <div className="text-xs font-bold uppercase tracking-[0.25em] mb-4" style={{ color: "rgba(255,255,255,0.5)" }}>
+              {t.cta.label}
+            </div>
+            <h2 className={`text-4xl lg:text-6xl font-black text-white leading-tight tracking-tight ${isRTL ? "text-right" : ""}`}>
+              {t.cta.title}
+            </h2>
+            <p className={`mt-5 text-base leading-relaxed max-w-md ${isRTL ? "text-right" : ""}`} style={{ color: "rgba(255,255,255,0.65)" }}>
+              {t.cta.sub}
+            </p>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight" style={{ fontWeight: 900 }}>
-            {t.cta.title1}{" "}
-            <span style={{ background: "linear-gradient(135deg, #5319c6, #ff2c34)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-              {t.cta.title2}
-            </span>
-          </h2>
+          {/* Right */}
+          <div className={`flex flex-col gap-6 ${isRTL ? "items-end" : ""}`}>
+            {/* Button */}
+            <Link href="/contact"
+              className="inline-flex items-center gap-3 px-8 py-4 text-sm font-black uppercase tracking-widest transition-all duration-200 hover:bg-gray-100"
+              style={{ background: "#ffffff", color: "#5319c6" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#ff2c34"; (e.currentTarget as HTMLElement).style.color = "#fff"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#ffffff"; (e.currentTarget as HTMLElement).style.color = "#5319c6"; }}
+            >
+              {t.cta.btn}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </Link>
 
-          <p className="text-lg text-gray-400 max-w-xl mx-auto mb-10">{t.cta.subtitle}</p>
-
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-3 px-10 py-4 rounded-full text-white font-black text-lg uppercase tracking-wider transition-all duration-300"
-            style={{ background: "linear-gradient(135deg, #5319c6 0%, #ff2c34 100%)", boxShadow: "0 8px 40px rgba(83,25,198,0.5), 0 0 80px rgba(255,44,52,0.2)" }}
-            onMouseEnter={(e) => gsap.to(e.currentTarget, { scale: 1.06, boxShadow: "0 12px 60px rgba(83,25,198,0.7), 0 0 100px rgba(255,44,52,0.4)", duration: 0.3 })}
-            onMouseLeave={(e) => gsap.to(e.currentTarget, { scale: 1, boxShadow: "0 8px 40px rgba(83,25,198,0.5), 0 0 80px rgba(255,44,52,0.2)", duration: 0.3 })}
-          >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" fill="currentColor" />
-            </svg>
-            {t.cta.btn}
-          </Link>
-
-          <div className="mt-10 flex flex-wrap justify-center gap-8">
-            {[
-              { icon: "📍", label: t.cta.info1 },
-              { icon: "🕐", label: t.cta.info2 },
-              { icon: "✅", label: t.cta.info3 },
-            ].map((item) => (
-              <div key={item.label} className="flex items-center gap-2 text-sm text-gray-400 font-medium">
-                <span>{item.icon}</span>{item.label}
-              </div>
-            ))}
+            {/* Info pills */}
+            <div className={`flex flex-wrap gap-3 ${isRTL ? "justify-end" : ""}`}>
+              {t.cta.infos.map((info, i) => (
+                <span key={i}
+                  className="px-4 py-2 text-xs font-semibold uppercase tracking-wider"
+                  style={{
+                    background: "rgba(255,255,255,0.1)",
+                    border: "1px solid rgba(255,255,255,0.2)",
+                    color: "rgba(255,255,255,0.8)",
+                  }}>
+                  {info.label}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>

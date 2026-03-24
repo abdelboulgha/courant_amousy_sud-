@@ -8,127 +8,121 @@ import { useLang } from "@/contexts/LanguageContext";
 
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
-const serviceColors = ["#5319c6", "#7c3aed", "#be185d", "#ff2c34"];
-
-const serviceIcons = [
-  // Électricité générale
-  <svg key="s1" width="40" height="40" viewBox="0 0 40 40" fill="none">
-    <rect x="8" y="12" width="24" height="3" rx="1.5" fill="currentColor" opacity="0.4" />
-    <rect x="8" y="18.5" width="24" height="3" rx="1.5" fill="currentColor" opacity="0.7" />
-    <rect x="8" y="25" width="16" height="3" rx="1.5" fill="currentColor" />
-    <circle cx="30" cy="26.5" r="5" stroke="currentColor" strokeWidth="2" fill="none" />
-    <path d="M30 24 L30 26.5 L32 28.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    <path d="M20 6 L17 12 L20 12 L17 20 L23 13 L20 13 Z" fill="currentColor" />
+const ICONS = [
+  // Électricité
+  <svg key="e" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
   </svg>,
-  // Installation industrielle
-  <svg key="s2" width="40" height="40" viewBox="0 0 40 40" fill="none">
-    <rect x="6" y="14" width="8" height="12" rx="2" stroke="currentColor" strokeWidth="2" fill="none" />
-    <rect x="16" y="10" width="8" height="20" rx="2" stroke="currentColor" strokeWidth="2" fill="none" />
-    <rect x="26" y="17" width="8" height="13" rx="2" stroke="currentColor" strokeWidth="2" fill="none" />
-    <path d="M20 6 L17 12 L20 12 L17 20 L23 13 L20 13 Z" fill="currentColor" />
-    <path d="M4 34 L36 34" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
+  // Construction
+  <svg key="c" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 21h18M5 21V7l7-4 7 4v14" /><path d="M9 21v-6h6v6" />
   </svg>,
-  // Maintenance
-  <svg key="s3" width="40" height="40" viewBox="0 0 40 40" fill="none">
-    <path d="M20 8 C13.37 8 8 13.37 8 20 C8 26.63 13.37 32 20 32 C26.63 32 32 26.63 32 20"
-      stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-    <path d="M26 8 L32 8 L32 14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M32 8 L22 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    <circle cx="20" cy="20" r="3" fill="currentColor" />
+  // Solaire
+  <svg key="s" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
   </svg>,
-  // Dépannage
-  <svg key="s4" width="40" height="40" viewBox="0 0 40 40" fill="none">
-    <path d="M20 6 L16 16 L20 16 L14 34 L24 22 L19 22 Z" fill="currentColor" />
-    <path d="M8 20 C8 13.37 13.37 8 20 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.5" fill="none" />
-    <path d="M32 20 C32 26.63 26.63 32 20 32" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.5" fill="none" />
+  // Plomberie
+  <svg key="p" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12" /><path d="M2 12c0 2.4 1 4.5 2.5 6" /><path d="M12 12h.01" />
+    <path d="M9 9h.01M15 9h.01M9 15h.01" />
+  </svg>,
+  // Travaux divers
+  <svg key="t" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
   </svg>,
 ];
 
 export default function Services() {
   const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const headRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
   const { t, isRTL } = useLang();
-
-  const services = [
-    { title: t.services.s1t, desc: t.services.s1d, color: serviceColors[0], icon: serviceIcons[0] },
-    { title: t.services.s2t, desc: t.services.s2d, color: serviceColors[1], icon: serviceIcons[1] },
-    { title: t.services.s3t, desc: t.services.s3d, color: serviceColors[2], icon: serviceIcons[2] },
-    { title: t.services.s4t, desc: t.services.s4d, color: serviceColors[3], icon: serviceIcons[3] },
-  ];
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
-        trigger: headingRef.current, start: "top 85%",
-        onEnter: () => gsap.fromTo(headingRef.current, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }),
+        trigger: headRef.current,
+        start: "top 88%",
+        onEnter: () => {
+          gsap.fromTo(headRef.current, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" });
+        },
       });
-      cardsRef.current.forEach((card, i) => {
-        if (!card) return;
+      const cards = gridRef.current?.querySelectorAll(".svc-item");
+      if (cards) {
         ScrollTrigger.create({
-          trigger: card, start: "top 90%",
-          onEnter: () => gsap.fromTo(card, { y: 70, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.7, ease: "back.out(1.3)", delay: (i % 2) * 0.1 }),
+          trigger: gridRef.current,
+          start: "top 85%",
+          onEnter: () => {
+            gsap.fromTo(cards, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: "power3.out" });
+          },
         });
-      });
+      }
     }, sectionRef);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-24 relative overflow-hidden" style={{ background: "#07071a" }} dir={isRTL ? "rtl" : "ltr"}>
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 80% 50% at 50% 50%, rgba(83,25,198,0.08) 0%, transparent 70%)" }} />
-
+    <section ref={sectionRef} className="py-24" style={{ background: "#f5f5fa" }} dir={isRTL ? "rtl" : "ltr"}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div ref={headingRef} className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4"
-            style={{ background: "rgba(255,44,52,0.1)", border: "1px solid rgba(255,44,52,0.25)", color: "#f87171" }}>
-            {t.services.badge}
+
+        {/* Header */}
+        <div ref={headRef} className={`mb-16 flex flex-col sm:flex-row sm:items-end justify-between gap-6 ${isRTL ? "sm:flex-row-reverse" : ""}`}>
+          <div>
+            <span className="text-xs font-bold uppercase tracking-[0.25em]" style={{ color: "#ff2c34" }}>
+              {t.services.badge}
+            </span>
+            <h2 className="mt-3 text-4xl lg:text-5xl font-black text-gray-900 leading-tight tracking-tight">
+              {t.services.title}
+            </h2>
           </div>
-          <h2 className="text-4xl lg:text-5xl font-black text-white mb-4" style={{ fontWeight: 900 }}>
-            {t.services.title1}{" "}
-            <span style={{ color: "#5319c6" }}>{t.services.title2}</span>
-          </h2>
-          <p className="text-gray-400 text-lg max-w-xl mx-auto">{t.services.subtitle}</p>
+          <p className="text-base max-w-xs leading-relaxed" style={{ color: "#666688" }}>
+            {t.services.sub}
+          </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((service, i) => {
-            let iconRef: HTMLDivElement | null = null;
-            return (
-              <div
-                key={service.title}
-                ref={(el) => { cardsRef.current[i] = el; }}
-                className="group p-7 rounded-2xl cursor-default"
-                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(83,25,198,0.2)", opacity: 0 }}
-                onMouseEnter={(e) => {
-                  gsap.to(e.currentTarget, { y: -10, duration: 0.3, ease: "power2.out" });
-                  (e.currentTarget as HTMLElement).style.borderColor = service.color;
-                  (e.currentTarget as HTMLElement).style.boxShadow = `0 16px 48px ${service.color}33`;
-                  if (iconRef) gsap.to(iconRef, { rotation: 15, scale: 1.15, duration: 0.3 });
-                }}
-                onMouseLeave={(e) => {
-                  gsap.to(e.currentTarget, { y: 0, duration: 0.3, ease: "power2.out" });
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(83,25,198,0.2)";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "none";
-                  if (iconRef) gsap.to(iconRef, { rotation: 0, scale: 1, duration: 0.3 });
-                }}
-              >
-                <div ref={(el) => { iconRef = el; }}
-                  className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5"
-                  style={{ background: `${service.color}22`, color: service.color }}>
-                  {service.icon}
-                </div>
-                <h3 className={`font-black text-xl text-white mb-3 ${isRTL ? "text-right" : ""}`}>{service.title}</h3>
-                <p className={`text-gray-400 text-sm leading-relaxed mb-6 ${isRTL ? "text-right" : ""}`}>{service.desc}</p>
-                <Link href="/services" className="inline-flex items-center gap-1.5 text-sm font-bold transition-all"
-                  style={{ color: service.color }}>
-                  {t.services.learnMore}
-                </Link>
+        {/* Grid */}
+        <div ref={gridRef} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px" style={{ background: "#e2e2ec" }}>
+          {t.services.items.map((svc, i) => (
+            <div
+              key={i}
+              className="svc-card svc-item group bg-white p-8 flex flex-col gap-4 opacity-0"
+              style={{ borderLeft: isRTL ? "none" : "3px solid transparent", borderRight: isRTL ? "3px solid transparent" : "none" }}
+            >
+              {/* Number + icon row */}
+              <div className={`flex items-center justify-between ${isRTL ? "flex-row-reverse" : ""}`}>
+                <span className="text-xs font-bold tracking-[0.2em]" style={{ color: "#ccccdd" }}>
+                  {svc.num}
+                </span>
+                <span className="w-10 h-10 rounded-sm flex items-center justify-center transition-colors duration-200 group-hover:bg-red-50"
+                  style={{ background: "#f5f5fa", color: "#5319c6" }}>
+                  {ICONS[i]}
+                </span>
               </div>
-            );
-          })}
+
+              {/* Title */}
+              <h3 className={`text-xl font-black text-gray-900 ${isRTL ? "text-right" : ""}`}>
+                {svc.title}
+              </h3>
+
+              {/* Desc */}
+              <p className={`text-sm leading-relaxed flex-1 ${isRTL ? "text-right" : ""}`} style={{ color: "#666688" }}>
+                {svc.desc}
+              </p>
+
+              {/* Link */}
+              <Link href="/services"
+                className={`inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-colors duration-200 group-hover:gap-3 ${isRTL ? "flex-row-reverse" : ""}`}
+                style={{ color: "#5319c6" }}>
+                {isRTL ? (
+                  <><span>{svc.link}</span><span>←</span></>
+                ) : (
+                  <><span>{svc.link}</span><span>→</span></>
+                )}
+              </Link>
+            </div>
+          ))}
         </div>
+
       </div>
     </section>
   );

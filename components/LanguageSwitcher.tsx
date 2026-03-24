@@ -6,56 +6,30 @@ import { useRef } from "react";
 
 export default function LanguageSwitcher() {
   const { lang, setLang } = useLang();
-  const btnRef = useRef<HTMLDivElement>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
 
   const toggle = () => {
-    const next = lang === "fr" ? "ar" : "fr";
-
-    // Quick flash animation
     if (btnRef.current) {
-      gsap.fromTo(
-        btnRef.current,
-        { scale: 0.85, opacity: 0.5 },
-        { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2)" }
-      );
+      gsap.fromTo(btnRef.current, { scale: 0.9, opacity: 0.6 }, { scale: 1, opacity: 1, duration: 0.25, ease: "back.out(2)" });
     }
-    setLang(next);
+    setLang(lang === "fr" ? "ar" : "fr");
   };
 
   return (
-    <div ref={btnRef}>
-      <button
-        onClick={toggle}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-200 hover:scale-105"
-        style={{
-          background: "rgba(83,25,198,0.2)",
-          border: "1px solid rgba(83,25,198,0.4)",
-          color: "#c084fc",
-        }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.background = "rgba(255,44,52,0.15)";
-          (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,44,52,0.4)";
-          (e.currentTarget as HTMLElement).style.color = "#f87171";
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.background = "rgba(83,25,198,0.2)";
-          (e.currentTarget as HTMLElement).style.borderColor = "rgba(83,25,198,0.4)";
-          (e.currentTarget as HTMLElement).style.color = "#c084fc";
-        }}
-        aria-label="Switch language"
-      >
-        {lang === "fr" ? (
-          <>
-            <span>🇩🇿</span>
-            <span>عربي</span>
-          </>
-        ) : (
-          <>
-            <span>🇫🇷</span>
-            <span>FR</span>
-          </>
-        )}
-      </button>
-    </div>
+    <button
+      ref={btnRef}
+      onClick={toggle}
+      className="px-3 py-1.5 text-xs font-bold uppercase tracking-widest transition-all duration-150 hover:text-white"
+      style={{
+        border: "1px solid rgba(255,255,255,0.15)",
+        color: "#aaaacc",
+        background: "transparent",
+      }}
+      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,44,52,0.4)"; }}
+      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.15)"; }}
+      aria-label="Switch language"
+    >
+      {lang === "fr" ? "عربي" : "FR"}
+    </button>
   );
 }

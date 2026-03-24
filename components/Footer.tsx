@@ -4,14 +4,14 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
-import LogoSVG from "./LogoSVG";
+import Image from "next/image";
 import { useLang } from "@/contexts/LanguageContext";
 
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
-  const { t, lang, isRTL } = useLang();
+  const { t, isRTL } = useLang();
 
   const navLinks = [
     { label: t.nav.home, href: "/" },
@@ -21,17 +21,16 @@ export default function Footer() {
     { label: t.nav.contact, href: "/contact" },
   ];
 
-  const services = [t.services.s1t, t.services.s2t, t.services.s3t, t.services.s4t];
-
   useEffect(() => {
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
-        trigger: footerRef.current, start: "top 90%",
+        trigger: footerRef.current,
+        start: "top 92%",
         onEnter: () => {
           gsap.fromTo(
-            footerRef.current?.querySelectorAll(".footer-col") ?? [],
-            { y: 40, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: "power2.out" }
+            footerRef.current?.querySelectorAll(".f-col") ?? [],
+            { y: 30, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: "power2.out" }
           );
         },
       });
@@ -40,52 +39,33 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer ref={footerRef} className="relative overflow-hidden"
-      style={{ background: "#030310", borderTop: "1px solid rgba(83,25,198,0.2)" }}
-      dir={isRTL ? "rtl" : "ltr"}>
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px"
-        style={{ background: "linear-gradient(90deg, transparent, #5319c6, transparent)" }} />
+    <footer ref={footerRef} style={{ background: "#030310" }} dir={isRTL ? "rtl" : "ltr"}>
+      {/* Top border */}
+      <div style={{ height: 1, background: "rgba(255,255,255,0.05)" }} />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
 
           {/* Brand */}
-          <div className="footer-col opacity-0 lg:col-span-1">
-            <LogoSVG size={44} />
-            <p className="text-gray-400 text-sm leading-relaxed mt-4 mb-6">{t.footer.desc}</p>
-            <div className={`flex gap-3 ${isRTL ? "flex-row-reverse" : ""}`}>
-              {["F", "I", "L"].map((s) => (
-                <button key={s}
-                  className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-200 hover:scale-110"
-                  style={{ background: "rgba(83,25,198,0.2)", border: "1px solid rgba(83,25,198,0.3)", color: "#a78bfa" }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "rgba(255,44,52,0.2)";
-                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,44,52,0.4)";
-                    (e.currentTarget as HTMLElement).style.color = "#f87171";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "rgba(83,25,198,0.2)";
-                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(83,25,198,0.3)";
-                    (e.currentTarget as HTMLElement).style.color = "#a78bfa";
-                  }}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
+          <div className="f-col opacity-0 lg:col-span-1">
+            <Image src="/assets/LOGO-PNG.png" alt="Courant Amousy Sud" width={140} height={80} style={{ objectFit: "contain" }} />
+            <p className={`mt-5 text-sm leading-relaxed ${isRTL ? "text-right" : ""}`} style={{ color: "#666688" }}>
+              {t.footer.desc}
+            </p>
           </div>
 
-          {/* Navigation */}
-          <div className="footer-col opacity-0">
-            <h4 className="font-black text-sm uppercase tracking-widest mb-5" style={{ color: "#ff2c34" }}>
-              {t.footer.navTitle}
-            </h4>
+          {/* Nav */}
+          <div className="f-col opacity-0">
+            <div className="text-xs font-bold uppercase tracking-[0.2em] mb-5" style={{ color: "#ff2c34" }}>
+              {t.footer.nav}
+            </div>
             <ul className="space-y-3">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href}
-                    className={`text-gray-400 text-sm font-medium transition-all duration-200 inline-block hover:text-white ${isRTL ? "" : "hover:translate-x-1"}`}>
-                    {isRTL ? `${link.label} ←` : `→ ${link.label}`}
+                    className={`text-sm transition-colors duration-150 hover:text-white block ${isRTL ? "text-right" : ""}`}
+                    style={{ color: "#666688" }}>
+                    {link.label}
                   </Link>
                 </li>
               ))}
@@ -93,16 +73,17 @@ export default function Footer() {
           </div>
 
           {/* Services */}
-          <div className="footer-col opacity-0">
-            <h4 className="font-black text-sm uppercase tracking-widest mb-5" style={{ color: "#5319c6" }}>
-              {t.footer.servicesTitle}
-            </h4>
+          <div className="f-col opacity-0">
+            <div className="text-xs font-bold uppercase tracking-[0.2em] mb-5" style={{ color: "#5319c6" }}>
+              {t.footer.svcTitle}
+            </div>
             <ul className="space-y-3">
-              {services.map((s) => (
-                <li key={s}>
+              {t.services.items.map((svc) => (
+                <li key={svc.num}>
                   <Link href="/services"
-                    className={`text-gray-400 text-sm font-medium transition-all duration-200 inline-block hover:text-white ${isRTL ? "" : "hover:translate-x-1"}`}>
-                    ⚡ {s}
+                    className={`text-sm transition-colors duration-150 hover:text-white block ${isRTL ? "text-right" : ""}`}
+                    style={{ color: "#666688" }}>
+                    {svc.title}
                   </Link>
                 </li>
               ))}
@@ -110,38 +91,38 @@ export default function Footer() {
           </div>
 
           {/* Contact */}
-          <div className="footer-col opacity-0">
-            <h4 className="font-black text-sm uppercase tracking-widest mb-5" style={{ color: "#a78bfa" }}>
+          <div className="f-col opacity-0">
+            <div className="text-xs font-bold uppercase tracking-[0.2em] mb-5" style={{ color: "#8888aa" }}>
               {t.footer.contactTitle}
-            </h4>
+            </div>
             <ul className="space-y-4">
               {[
-                { icon: "📍", title: t.footer.address, val: t.footer.addressVal },
-                { icon: "📞", title: t.footer.phone, val: t.footer.phoneVal },
-                { icon: "✉️", title: t.footer.email, val: t.footer.emailVal },
-                { icon: "🕐", title: t.footer.urgent, val: t.footer.urgentVal },
-              ].map((item) => (
-                <li key={item.title} className={`flex items-start gap-3 ${isRTL ? "flex-row-reverse text-right" : ""}`}>
-                  <span className="text-lg mt-0.5">{item.icon}</span>
-                  <div>
-                    <div className="text-white text-sm font-semibold">{item.title}</div>
-                    <div className="text-gray-400 text-sm">{item.val}</div>
-                  </div>
+                { label: t.footer.addr },
+                { label: t.footer.phone },
+                { label: t.footer.email },
+                { label: t.footer.hours },
+              ].map((item, i) => (
+                <li key={i} className={`text-sm leading-snug ${isRTL ? "text-right" : ""}`} style={{ color: "#666688" }}>
+                  {item.label}
                 </li>
               ))}
             </ul>
           </div>
         </div>
 
-        {/* Bottom */}
-        <div className="mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4"
-          style={{ borderTop: "1px solid rgba(83,25,198,0.15)" }}>
-          <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Courant Amousy Sud (CAS). {t.footer.copyright}
+        {/* Bottom bar */}
+        <div className="mt-14 pt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+          <p className="text-xs" style={{ color: "#444466" }}>
+            © {new Date().getFullYear()} Courant Amousy Sud (CAS). {t.footer.rights}
           </p>
           <div className={`flex gap-6 ${isRTL ? "flex-row-reverse" : ""}`}>
-            <Link href="#" className="text-gray-500 text-xs hover:text-gray-300 transition-colors">{t.footer.legal}</Link>
-            <Link href="#" className="text-gray-500 text-xs hover:text-gray-300 transition-colors">{t.footer.privacy}</Link>
+            <Link href="#" className="text-xs transition-colors hover:text-white" style={{ color: "#444466" }}>
+              {t.footer.legal}
+            </Link>
+            <Link href="#" className="text-xs transition-colors hover:text-white" style={{ color: "#444466" }}>
+              {t.footer.privacy}
+            </Link>
           </div>
         </div>
       </div>
