@@ -30,8 +30,11 @@ export default function CTA() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-24" style={{ background: "#5319c6" }} dir={isRTL ? "rtl" : "ltr"}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section ref={sectionRef} className="cta-glow py-24 relative overflow-hidden" style={{ background: "#5319c6" }} dir={isRTL ? "rtl" : "ltr"}>
+      {/* Decorative radial flares */}
+      <div aria-hidden style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "radial-gradient(ellipse 60% 80% at 100% 50%, rgba(255,44,52,0.18) 0%, transparent 70%)" }} />
+      <div aria-hidden style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "radial-gradient(ellipse 50% 70% at 0% 50%, rgba(255,255,255,0.06) 0%, transparent 70%)" }} />
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
         <div ref={innerRef} className={`flex flex-col lg:flex-row lg:items-end gap-12 lg:gap-20 ${isRTL ? "lg:flex-row-reverse" : ""}`}>
 
           {/* Left text */}

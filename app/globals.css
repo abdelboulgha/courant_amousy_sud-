@@ -80,3 +80,20 @@ body {
 
 /* Smooth fade-up (initial state handled by GSAP) */
 .fade-up { opacity: 0; transform: translateY(40px); }
+
+/* CTA glow pulse */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 60px 0 rgba(255,44,52,0.0), 0 0 120px 0 rgba(83,25,198,0.18); }
+  50%       { box-shadow: 0 0 80px 20px rgba(255,44,52,0.12), 0 0 180px 40px rgba(83,25,198,0.32); }
+}
+.cta-glow { animation: glow-pulse 4s ease-in-out infinite; }
+
+/* Service image card */
+.svc-img-card { border: 2px solid transparent; transition: border-color 0.3s ease; }
+.svc-img-card:hover { border-color: #ff2c34; }
+.svc-img-bg { transition: transform 0.7s ease; }
+.svc-img-card:hover .svc-img-bg { transform: scale(1.08); }
+
+/* Horizontal scroll projects - hide scrollbar */
+.proj-track::-webkit-scrollbar { display: none; }
+.proj-track { -ms-overflow-style: none; scrollbar-width: none; }

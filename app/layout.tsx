@@ -16,9 +16,9 @@ const tajawal = Tajawal({
 });
 
 export const metadata: Metadata = {
-  title: "Courant Amousy Sud | Travaux Électriques",
+  title: "Courant Amousy Sud | Multi-Services",
   description:
-    "Courant Amousy Sud (CAS) — Expert en travaux électriques, installation industrielle, maintenance et dépannage rapide.",
+    "Courant Amousy Sud (CAS) — Électricité, plomberie, climatisation, vidéosurveillance, système d'alarme, peinture & plâtre et travaux divers. Solutions fiables dans la région Sud.",
 };
 
 export default function RootLayout({
