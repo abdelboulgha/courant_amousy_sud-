@@ -17,12 +17,13 @@ const SERVICE_IMAGES = [
   "/assets/images/services/surveillance.png",
   "/assets/images/services/alarm.png",
   "/assets/images/services/finishing.png",
+  "/assets/images/services/zellige.png",
   "/assets/images/services/construction.png",
 ];
 
 // Fallback gradient per service
 const SERVICE_FALLBACKS = [
-  "#1a0a3a", "#0a1f3a", "#0a2a1a", "#1a1a0a", "#2a0a0a", "#1a0a2a", "#0a1a0a",
+  "#1a0a3a", "#0a1f3a", "#0a2a1a", "#1a1a0a", "#2a0a0a", "#1a0a2a", "#1a150a", "#0a1a0a",
 ];
 
 // Service icons (SVG)
@@ -52,6 +53,13 @@ const ICONS = [
     <path d="M18.37 2.63 14 7l-1.59-1.59a2 2 0 0 0-2.82 0L8 7l9 9 1.59-1.59a2 2 0 0 0 0-2.82L17 10l4.37-4.37a2.12 2.12 0 1 0-3-3z" />
     <path d="M9 8c-2 3-4 3.5-7 4l8 8c1-.5 3.5-2 4-7" />
     <path d="M14.5 17.5 4.5 15" />
+  </svg>,
+  // Plâtre & Zellige — grid
+  <svg key="z" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="7" height="7" />
+    <rect x="14" y="3" width="7" height="7" />
+    <rect x="14" y="14" width="7" height="7" />
+    <rect x="3" y="14" width="7" height="7" />
   </svg>,
   // Travaux divers — wrench
   <svg key="t" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">

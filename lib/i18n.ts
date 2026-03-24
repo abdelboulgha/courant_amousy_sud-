@@ -26,7 +26,8 @@ export const translations = {
       "Climatisation",
       "Vidéosurveillance",
       "Système d'alarme",
-      "Peinture & Plâtre",
+      "Peinture & Décoration",
+      "Plâtre & Zellige",
       "Travaux Divers",
     ],
     stats: [
@@ -72,12 +73,18 @@ export const translations = {
         },
         {
           num: "06",
-          title: "Peinture & Plâtre",
-          desc: "Travaux de finition intérieure : peinture, plâtre, enduit et décoration pour sublimer vos espaces.",
+          title: "Peinture & Décoration",
+          desc: "Travaux de finition intérieure : peinture, enduit et décoration pour sublimer vos espaces.",
           link: "Découvrir",
         },
         {
           num: "07",
+          title: "Plâtre & Zellige",
+          desc: "Expertise en artisanat et finition : pose de plâtre moderne, traditionnel et zellige authentique.",
+          link: "Découvrir",
+        },
+        {
+          num: "08",
           title: "Travaux Divers",
           desc: "Accompagnement complet pour vos projets de construction, aménagement et rénovation tous corps d'état.",
           link: "Découvrir",
@@ -199,7 +206,8 @@ export const translations = {
       "تكييف الهواء",
       "المراقبة بالكاميرات",
       "نظام الإنذار",
-      "الطلاء والجبس",
+      "الطلاء والديكور",
+      "الجبص والزليج",
       "أعمال متنوعة",
     ],
     stats: [
@@ -245,12 +253,18 @@ export const translations = {
         },
         {
           num: "06",
-          title: "الطلاء والجبس",
-          desc: "أعمال التشطيب الداخلي: طلاء، جبس، حجر وديكور لتجميل فضاءاتكم.",
+          title: "الطلاء والديكور",
+          desc: "أعمال التشطيب الداخلي: طلاء، حجر وديكور لتجميل فضاءاتكم.",
           link: "اكتشف",
         },
         {
           num: "07",
+          title: "الجبص والزليج",
+          desc: "خبرة في الحرف اليدوية والتشطيبات: تركيب الجبص العصري والتقليدي والزليج الأصيل.",
+          link: "اكتشف",
+        },
+        {
+          num: "08",
           title: "أعمال متنوعة",
           desc: "مرافقة كاملة لمشاريع البناء والتهيئة والترميم بجميع أوجهها.",
           link: "اكتشف",

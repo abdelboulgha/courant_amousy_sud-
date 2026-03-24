@@ -53,6 +53,12 @@ const SERVICE_DATA = [
     effectType: "brush",
   },
   {
+    id: "zellige",
+    image: "/assets/images/services/zellige.png",
+    accent: "#8c52ff",
+    effectType: "brush",
+  },
+  {
     id: "construction",
     image: "/assets/images/services/construction.png",
     accent: "#ffbd00",

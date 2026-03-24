@@ -79,7 +79,8 @@ const SERVICES_DATA = [
   { id: "ac", titleFR: "Climatisation", titleAR: "التكييف", svg: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.514a.25.25 0 01.164.045l4.004 3.003c.241.181.514.305.808.368L14 14z" /></svg> },
   { id: "surveillance", titleFR: "Vidéosurveillance", titleAR: "كاميرات المراقبة", svg: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg> },
   { id: "alarm", titleFR: "Système d'alarme", titleAR: "أنظمة الإنذار", svg: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg> },
-  { id: "painting", titleFR: "Peinture, Plâtre, Décorations", titleAR: "صباغة وديكور", svg: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg> },
+  { id: "painting", titleFR: "Peinture, Plâtre, Décorations", titleAR: "الطلاء والديكور", svg: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg> },
+  { id: "zellige", titleFR: "Plâtre & Zellige", titleAR: "الجبص والزليج", svg: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg> },
   { id: "misc", titleFR: "Travaux divers / Construction", titleAR: "أشغال بناء متنوعة", svg: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg> },
 ];
 
@@ -418,13 +419,15 @@ export default function AboutClient() {
 
            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4`}>
              {SERVICES_DATA.map((srv, i) => (
-                <Link key={srv.id} href="/services" className={`service-card-reveal group relative p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-[#ff2c34]/10 transition-colors duration-500 flex flex-col justify-center items-center text-center ${i === 6 ? "md:col-span-2 lg:col-span-2" : ""}`}>
+                <Link key={srv.id} href="/services" className={`service-card-reveal group relative p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-[#ff2c34]/10 transition-colors duration-500 flex flex-col justify-center items-center text-center`}>
                    <div className="w-16 h-16 rounded-full bg-[#020205] border border-white/10 flex items-center justify-center mb-6 text-[#5319c6] group-hover:text-[#ff2c34] group-hover:scale-110 transition-all duration-300">
-                      <div className="w-8 h-8">
+
+                   <div className="w-8 h-8">
                         {srv.svg}
-                      </div>
+                   </div>
                    </div>
                    <h3 className="text-lg font-bold text-white group-hover:text-[#ff2c34] transition-colors">{isRTL ? srv.titleAR : srv.titleFR}</h3>
+
                    <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-[#ff2c34] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-x-0 group-hover:scale-x-100" />
                 </Link>
              ))}
