@@ -103,6 +103,17 @@ export const translations = {
         { num: "04", title: "Réactivité", desc: "Intervention rapide, respect des délais, disponibilité 24h/24 pour urgences." },
       ],
     },
+    advantages: {
+      badge: "Nos avantages",
+      title: "Pourquoi nous choisir ?",
+      sub: "Une approche globale orientée vers la performance, la sécurité et la satisfaction de nos clients.",
+      items: [
+        { title: "Techniciens Qualifiés", desc: "Nos équipes possèdent les certifications requises pour des interventions aux normes." },
+        { title: "Équipements Haut de Gamme", desc: "Nous utilisons du matériel dernière génération pour garantir longévité et efficacité." },
+        { title: "Intervention Rapide", desc: "Disponibilité pour les urgences et respect absolu de nos plannings de livraison." },
+        { title: "Solutions Sur-Mesure", desc: "De l'étude de faisabilité à l'exécution, chaque projet est pensé pour répondre à vos besoins." },
+      ],
+    },
     projects: {
       badge: "Réalisations",
       title: "Nos projets récents",
@@ -283,6 +294,17 @@ export const translations = {
         { num: "04", title: "الاستجابة", desc: "تدخل سريع، احترام المواعيد، متوفر 24 ساعة للطوارئ." },
       ],
     },
+    advantages: {
+      badge: "مميزاتنا",
+      title: "لماذا تختاروننا؟",
+      sub: "نهج يركز على الأداء والسلامة ورضا عملائنا الكامل.",
+      items: [
+        { title: "فنيون مؤهلون", desc: "فرقنا حاصلة على الشهادات اللازمة لتدخلات آمنة ومطابقة للمعايير." },
+        { title: "معدات متطورة", desc: "نستخدم أحدث المعدات لضمان المتانة وكفاءة استهلاك الطاقة." },
+        { title: "تدخل سريع", desc: "متوفرون للطوارئ. نحرص على احترام مواعيد التسليم دون تأخير." },
+        { title: "حلول مخصصة", desc: "من دراسة الجدوى إلى التنفيذ، يتم تصميم كل مشروع خصيصاً لتلبية احتياجاتكم." },
+      ],
+    },
     projects: {
       badge: "الإنجازات",
       title: "مشاريعنا الأخيرة",
@@ -374,6 +396,10 @@ export type Translations = {
   about: {
     badge: string; title: string; p1: string; p2: string;
     vals: readonly { num: string; title: string; desc: string }[];
+  };
+  advantages: {
+    badge: string; title: string; sub: string;
+    items: readonly { title: string; desc: string }[];
   };
   projects: {
     badge: string; title: string; sub: string; viewAll: string;
