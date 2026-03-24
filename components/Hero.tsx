@@ -345,7 +345,7 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* ── Hero text (title + CTA) ───────────────────── */}
+        {/* ── Hero text ─────────────────────────────────── */}
         <div
           ref={heroTextRef}
           dir={isRTL ? "rtl" : "ltr"}
@@ -356,127 +356,151 @@ export default function Hero() {
             opacity: 0,
             display: "flex",
             flexDirection: "column",
-            justifyContent: "flex-end",
-            padding: "clamp(20px, 5vw, 72px)",
-            paddingBottom: "clamp(72px, 11vh, 110px)",
+            justifyContent: "center",          /* vertical center */
+            padding: "clamp(24px, 5vw, 80px)",
+            paddingTop: 90,                    /* navbar clearance */
+            paddingBottom: 100,                /* stats bar clearance */
           }}
         >
-          <div style={{ maxWidth: 660 }}>
-            {/* Tagline */}
-            <span
-              style={{
-                display: "block",
-                fontSize: 10,
-                fontWeight: 700,
-                letterSpacing: "0.28em",
-                textTransform: "uppercase",
-                color: "rgba(255,255,255,0.38)",
-                marginBottom: 18,
-              }}
-            >
-              {t.hero.tagline}
-            </span>
+          <div style={{ maxWidth: 600 }}>
 
-            {/* Headline */}
-            <h1 style={{ margin: 0, padding: 0 }}>
-              <span
-                style={{
-                  display: "block",
-                  fontSize: "clamp(38px, 6.5vw, 82px)",
-                  fontWeight: 900,
-                  color: "#ffffff",
-                  lineHeight: 1.06,
-                  letterSpacing: "-0.025em",
-                }}
-              >
+            {/* Eyebrow */}
+            <div style={{
+              display: "flex", alignItems: "center", gap: 12,
+              marginBottom: 24,
+              flexDirection: isRTL ? "row-reverse" : "row",
+            }}>
+              <span style={{ width: 24, height: 2, background: "#ff2c34", display: "block", flexShrink: 0 }} />
+              <span style={{
+                fontSize: 9, fontWeight: 700, letterSpacing: "0.3em",
+                textTransform: "uppercase", color: "rgba(255,255,255,0.4)",
+              }}>
+                {t.hero.tagline}
+              </span>
+            </div>
+
+            {/* Title — 2 lines, safe size */}
+            <h1 style={{ margin: 0, padding: 0, lineHeight: 1.08, letterSpacing: "-0.02em" }}>
+              <span style={{
+                display: "block",
+                fontSize: "clamp(28px, 3.8vw, 58px)",
+                fontWeight: 900,
+                color: "#ffffff",
+              }}>
                 {t.hero.h1a}
               </span>
-              <span
-                style={{
-                  display: "block",
-                  fontSize: "clamp(38px, 6.5vw, 82px)",
-                  fontWeight: 900,
-                  color: "#ff2c34",
-                  lineHeight: 1.06,
-                  letterSpacing: "-0.025em",
-                }}
-              >
+              <span style={{
+                display: "block",
+                fontSize: "clamp(28px, 3.8vw, 58px)",
+                fontWeight: 900,
+                color: "#ff2c34",
+              }}>
                 {t.hero.h1b}
-              </span>
-              <span
-                style={{
-                  display: "block",
-                  fontSize: "clamp(38px, 6.5vw, 82px)",
-                  fontWeight: 900,
-                  color: "#ffffff",
-                  lineHeight: 1.06,
-                  letterSpacing: "-0.025em",
-                }}
-              >
-                {t.hero.h1c}
               </span>
             </h1>
 
+            {/* Thin separator */}
+            <div style={{ width: 40, height: 2, background: "rgba(255,255,255,0.12)", margin: "20px 0" }} />
+
             {/* Subtitle */}
-            <p
-              style={{
-                marginTop: 20,
-                marginBottom: 0,
-                fontSize: 15,
-                lineHeight: 1.7,
-                color: "rgba(255,255,255,0.5)",
-                maxWidth: 480,
-              }}
-            >
+            <p style={{
+              margin: 0,
+              fontSize: 14,
+              lineHeight: 1.75,
+              color: "rgba(255,255,255,0.48)",
+              maxWidth: 420,
+              textAlign: isRTL ? "right" : "left",
+            }}>
               {t.hero.sub}
             </p>
 
+            {/* Service chips */}
+            <div style={{
+              marginTop: 20,
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 7,
+              justifyContent: isRTL ? "flex-end" : "flex-start",
+            }}>
+              {t.ticker.slice(0, 5).map((chip, i) => (
+                <span key={i} style={{
+                  fontSize: 9, fontWeight: 700, letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  padding: "5px 10px",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  color: "rgba(255,255,255,0.45)",
+                }}>
+                  {chip}
+                </span>
+              ))}
+            </div>
+
             {/* CTA buttons */}
-            <div
-              style={{
-                marginTop: 30,
-                display: "flex",
-                gap: 12,
-                flexWrap: "wrap",
-                justifyContent: isRTL ? "flex-end" : "flex-start",
-              }}
-            >
-              <Link
-                href="/services"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  padding: "13px 26px",
-                  background: "#5319c6",
-                  color: "#ffffff",
-                  fontSize: 10,
-                  fontWeight: 700,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.18em",
-                  textDecoration: "none",
-                }}
-              >
+            <div style={{
+              marginTop: 28,
+              display: "flex", gap: 10, flexWrap: "wrap",
+              justifyContent: isRTL ? "flex-end" : "flex-start",
+            }}>
+              <Link href="/services" style={{
+                display: "inline-flex", alignItems: "center", gap: 9,
+                padding: "13px 26px",
+                background: "#ff2c34",
+                color: "#ffffff",
+                fontSize: 10, fontWeight: 800,
+                textTransform: "uppercase", letterSpacing: "0.2em",
+                textDecoration: "none",
+              }}>
                 {t.hero.btn1}
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ transform: isRTL ? "rotate(180deg)" : "none" }}>
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
               </Link>
-              <Link
-                href="/contact"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  padding: "13px 26px",
-                  background: "transparent",
-                  color: "#ffffff",
-                  fontSize: 10,
-                  fontWeight: 700,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.18em",
-                  textDecoration: "none",
-                  border: "1px solid rgba(255,255,255,0.18)",
-                }}
-              >
+              <Link href="/contact" style={{
+                display: "inline-flex", alignItems: "center",
+                padding: "13px 26px",
+                background: "rgba(255,255,255,0.07)",
+                color: "#ffffff",
+                fontSize: 10, fontWeight: 700,
+                textTransform: "uppercase", letterSpacing: "0.2em",
+                textDecoration: "none",
+                border: "1px solid rgba(255,255,255,0.14)",
+                backdropFilter: "blur(6px)",
+              }}>
                 {t.hero.btn2}
               </Link>
             </div>
+          </div>
+
+          {/* Stats bar — pinned to bottom */}
+          <div style={{
+            position: "absolute",
+            bottom: "clamp(24px, 4vh, 40px)",
+            left: "clamp(24px, 5vw, 80px)",
+            right: "clamp(24px, 5vw, 80px)",
+            display: "flex",
+            gap: "clamp(16px, 3vw, 40px)",
+            flexWrap: "wrap",
+            flexDirection: isRTL ? "row-reverse" : "row",
+            alignItems: "flex-end",
+          }}>
+            {t.stats.map((s, i) => (
+              <div key={i} style={{ display: "flex", flexDirection: "column", gap: 3, textAlign: isRTL ? "right" : "left" }}>
+                <span style={{
+                  fontSize: "clamp(16px, 2vw, 24px)", fontWeight: 900,
+                  color: i === 0 ? "#ff2c34" : "#ffffff",
+                  letterSpacing: "-0.02em", lineHeight: 1,
+                }}>
+                  {s.value}
+                </span>
+                <span style={{
+                  fontSize: 8, fontWeight: 600,
+                  textTransform: "uppercase", letterSpacing: "0.18em",
+                  color: "rgba(255,255,255,0.3)",
+                }}>
+                  {s.label}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
 
