@@ -455,11 +455,25 @@ export default function ServicesClient() {
         style={{ minHeight: "60vh", paddingTop: 110, paddingBottom: 80 }}
         dir={isRTL ? "rtl" : "ltr"}>
 
+        {/* Background Video */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover opacity-60 mix-blend-screen"
+            src="/assets/images/services/services.mp4"
+          />
+          {/* Gradient Overlay for text readability & merging into the page */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#07071a]/80 via-[#07071a]/40 to-[#07071a]" />
+        </div>
+
         {/* Bg glows */}
-        <div aria-hidden className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse 70% 60% at 50% 0%, rgba(83,25,198,0.22) 0%, transparent 70%)" }} />
-        <div aria-hidden className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse 50% 40% at 100% 100%, rgba(255,44,52,0.08) 0%, transparent 70%)" }} />
+        <div aria-hidden className="absolute inset-0 z-0 pointer-events-none"
+          style={{ background: "radial-gradient(ellipse 70% 60% at 50% 0%, rgba(83,25,198,0.25) 0%, transparent 70%)" }} />
+        <div aria-hidden className="absolute inset-0 z-0 pointer-events-none"
+          style={{ background: "radial-gradient(ellipse 50% 40% at 100% 100%, rgba(255,44,52,0.15) 0%, transparent 70%)" }} />
 
         <div ref={heroTextRef} className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <div className="hero-stagger inline-flex items-center gap-3 mb-6">
