@@ -367,6 +367,7 @@ export default function Hero() {
           <div style={{
             display: "flex", alignItems: "center", gap: 14,
             flexDirection: isRTL ? "row-reverse" : "row",
+            justifyContent: "center",
           }}>
             <span style={{ width: 20, height: 2, background: "#ff2c34", display: "block", flexShrink: 0 }} />
             <span style={{
@@ -375,109 +376,87 @@ export default function Hero() {
             }}>
               {t.hero.tagline}
             </span>
+            <span style={{ width: 20, height: 2, background: "#ff2c34", display: "block", flexShrink: 0 }} />
           </div>
 
           {/* ── MIDDLE: main content ──────────────────────── */}
-          <div style={{ position: "relative" }}>
+          <div style={{ position: "relative", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
 
             {/* Decorative "7" watermark behind title */}
             <span aria-hidden style={{
               position: "absolute",
-              top: "50%", right: isRTL ? "auto" : "-2%", left: isRTL ? "-2%" : "auto",
-              transform: "translateY(-55%)",
-              fontSize: "clamp(160px, 22vw, 300px)",
+              top: "50%", left: "50%",
+              transform: "translate(-50%, -50%)",
+              fontSize: "clamp(180px, 30vw, 400px)",
               fontWeight: 900,
               color: "transparent",
-              WebkitTextStroke: "1px rgba(255,255,255,0.04)",
+              WebkitTextStroke: "1px rgba(255,255,255,0.03)",
               lineHeight: 1,
               pointerEvents: "none",
               userSelect: "none",
               letterSpacing: "-0.04em",
+              zIndex: -1,
             }}>7</span>
-
-            {/* Left vertical accent line */}
-            {!isRTL && (
-              <span aria-hidden style={{
-                position: "absolute",
-                left: -20, top: 0, bottom: 0,
-                width: 2,
-                background: "linear-gradient(to bottom, #ff2c34, transparent)",
-              }} />
-            )}
-            {isRTL && (
-              <span aria-hidden style={{
-                position: "absolute",
-                right: -20, top: 0, bottom: 0,
-                width: 2,
-                background: "linear-gradient(to bottom, #ff2c34, transparent)",
-              }} />
-            )}
 
             {/* Title */}
             <h1 style={{ margin: 0, padding: 0 }}>
               {/* Line 1 — white fill */}
               <span style={{
                 display: "block",
-                fontSize: "clamp(34px, 5.5vw, 82px)",
+                fontSize: "clamp(34px, 6vw, 90px)",
                 fontWeight: 900,
                 color: "#ffffff",
                 lineHeight: 1.0,
                 letterSpacing: "-0.03em",
                 textTransform: "uppercase",
+                textShadow: "0 0 40px rgba(0,0,0,0.5)",
               }}>
                 {t.hero.h1a}
               </span>
               {/* Line 2 — outlined only (text-stroke), no fill */}
               <span style={{
                 display: "block",
-                fontSize: "clamp(34px, 5.5vw, 82px)",
+                fontSize: "clamp(34px, 6vw, 90px)",
                 fontWeight: 900,
                 color: "transparent",
                 lineHeight: 1.05,
                 letterSpacing: "-0.03em",
                 textTransform: "uppercase",
                 WebkitTextStroke: "2px #ff2c34",
+                filter: "drop-shadow(0 0 20px rgba(255,44,52,0.3))",
               }}>
                 {t.hero.h1b}
               </span>
             </h1>
 
-            {/* Horizontal rule */}
-            <div style={{
-              display: "flex", alignItems: "center", gap: 12, margin: "18px 0",
-              flexDirection: isRTL ? "row-reverse" : "row",
-            }}>
-              <span style={{ width: 36, height: 1, background: "#ff2c34", display: "block" }} />
-              <span style={{ width: 60, height: 1, background: "rgba(255,255,255,0.1)", display: "block" }} />
-            </div>
-
             {/* Subtitle */}
             <p style={{
-              margin: 0,
-              fontSize: 13,
+              margin: "24px auto 0",
+              fontSize: 14,
               lineHeight: 1.75,
-              color: "rgba(255,255,255,0.45)",
-              maxWidth: 400,
-              textAlign: isRTL ? "right" : "left",
+              color: "rgba(255,255,255,0.6)",
+              maxWidth: 500,
+              textAlign: "center",
             }}>
               {t.hero.sub}
             </p>
 
             {/* CTA buttons */}
             <div style={{
-              marginTop: 26,
-              display: "flex", gap: 10, flexWrap: "wrap",
-              justifyContent: isRTL ? "flex-end" : "flex-start",
+              marginTop: 32,
+              display: "flex", gap: 12, flexWrap: "wrap",
+              justifyContent: "center",
             }}>
               <Link href="/services" style={{
                 display: "inline-flex", alignItems: "center", gap: 9,
-                padding: "13px 26px",
+                padding: "14px 32px",
                 background: "#ff2c34",
                 color: "#ffffff",
                 fontSize: 10, fontWeight: 800,
                 textTransform: "uppercase", letterSpacing: "0.2em",
                 textDecoration: "none",
                 transition: "background 0.2s",
+                boxShadow: "0 10px 30px -10px rgba(255,44,52,0.5)",
               }}>
                 {t.hero.btn1}
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
@@ -487,14 +466,15 @@ export default function Hero() {
               </Link>
               <Link href="/contact" style={{
                 display: "inline-flex", alignItems: "center", gap: 8,
-                padding: "13px 26px",
-                background: "rgba(255,255,255,0.05)",
+                padding: "14px 32px",
+                background: "rgba(0,0,0,0.4)",
                 color: "#ffffff",
                 fontSize: 10, fontWeight: 700,
                 textTransform: "uppercase", letterSpacing: "0.2em",
                 textDecoration: "none",
-                border: "1px solid rgba(255,255,255,0.14)",
-                backdropFilter: "blur(6px)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                backdropFilter: "blur(10px)",
+                transition: "background 0.2s, border 0.2s",
               }}>
                 {t.hero.btn2}
               </Link>
