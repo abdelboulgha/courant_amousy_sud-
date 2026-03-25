@@ -86,7 +86,7 @@ const SERVICES_DATA = [
 const PROJECTS_DATA = [
   { titleFR: "Complexe Résidentiel", image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=1200&q=80", tag: "Électricité" },
   { titleFR: "Hôtel 5 Étoiles", image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=1200&q=80", tag: "Climatisation" },
-  { titleFR: "Centre Commercial", image: "https://images.unsplash.com/photo-1541888086225-ee8269d4d9de?auto=format&fit=crop&w=1200&q=80", tag: "Vidéosurveillance" },
+  { titleFR: "Centre Commercial", image: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=1200&q=80", tag: "Vidéosurveillance" },
   { titleFR: "Siège Social Tech", image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80", tag: "Construction" }
 ];
 
