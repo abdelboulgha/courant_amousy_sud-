@@ -11,7 +11,7 @@ if (typeof window !== "undefined") {
 }
 
 /* ─── Config ─────────────────────────────────────────────── */
-const TOTAL_FRAMES = 192;
+const TOTAL_FRAMES = 197;
 const SCROLL_MULTIPLIER = 6; // section height = 6 × 100vh
 const SCRUB = 0.8;
 
@@ -43,6 +43,7 @@ export default function Hero() {
   const scrollIndRef   = useRef<HTMLDivElement>(null);
   const labelRefs      = useRef<(HTMLDivElement | null)[]>([]);
   const progressBarRef = useRef<HTMLDivElement>(null);
+  const logoRevealRef  = useRef<HTMLDivElement>(null);
 
   const [loadPct, setLoadPct]   = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -146,6 +147,12 @@ export default function Hero() {
       el.style.transform = "translateX(-50%) translateY(24px)";
     });
 
+    // Init logo hidden
+    if (logoRevealRef.current) {
+      logoRevealRef.current.style.opacity   = "0";
+      logoRevealRef.current.style.transform = "translate(-50%, -50%) scale(0.5)";
+    }
+
     // Draw first frame
     drawFrame(0);
 
@@ -191,6 +198,18 @@ export default function Hero() {
             scrollIndRef.current.style.opacity = String(
               Math.max(0, 1 - p / 0.07)
             );
+          }
+
+          // ─ Logo reveal (last frames, after Travaux divers) ──
+          if (logoRevealRef.current) {
+            const LOGO_START = 0.93;
+            const a = p >= LOGO_START
+              ? Math.min(1, (p - LOGO_START) / 0.07)
+              : 0;
+            logoRevealRef.current.style.opacity = String(a);
+            // Scale from 0.5 → 1.0 for a dramatic grow effect
+            const scale = 0.5 + a * 0.5;
+            logoRevealRef.current.style.transform = `translate(-50%, -50%) scale(${scale})`;
           }
 
           // ─ Labels fade in/out ────────────────────────────
@@ -567,6 +586,46 @@ export default function Hero() {
             />
           </div>
         ))}
+
+        {/* ── Logo reveal (end of scroll) ─────────────── */}
+        <div
+          ref={logoRevealRef}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%) scale(0.5)",
+            zIndex: 26,
+            opacity: 0,
+            pointerEvents: "none",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 20,
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/assets/LOGO-PNG.png"
+            alt="Courant Amousy Sud"
+            style={{ width: "clamp(180px, 22vw, 300px)", height: "auto", filter: "drop-shadow(0 0 60px rgba(83,25,198,0.8)) drop-shadow(0 0 30px rgba(255,44,52,0.4))" }}
+          />
+          <span style={{
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: "0.38em",
+            textTransform: "uppercase",
+            color: "rgba(255,255,255,0.45)",
+          }}>
+            Courant Amousy Sud
+          </span>
+          <span style={{
+            display: "block",
+            width: 40,
+            height: 2,
+            background: "linear-gradient(90deg, #5319c6, #ff2c34)",
+          }} />
+        </div>
 
         {/* ── Scroll indicator ────────────────────────── */}
         <div
