@@ -643,6 +643,7 @@ export default function Hero() {
             maxWidth: 380,
             lineHeight: 1.7,
             margin: 0,
+            pointerEvents: "none",
           }}>
             {isRTL
               ? "هل لديك مشروع؟ نحن هنا لتحويله إلى واقع."
