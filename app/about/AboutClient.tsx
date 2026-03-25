@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Spline from "@splinetool/react-spline";
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -93,28 +92,35 @@ const PROJECTS_DATA = [
 
 export default function AboutClient() {
   const { t, isRTL } = useLang();
-  
-  const containerRef = useRef<HTMLDivElement>(null);
-  const heroRef = useRef<HTMLDivElement>(null);
-  const heroTextRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const lineRef = useRef<SVGPathElement>(null);
-  const valuesRef = useRef<HTMLDivElement>(null);
-  const servicesRef = useRef<HTMLDivElement>(null);
-  const projectsRef = useRef<HTMLDivElement>(null);
+
+  const containerRef    = useRef<HTMLDivElement>(null);
+  const heroRef         = useRef<HTMLElement>(null);
+  const heroTitleRef    = useRef<HTMLDivElement>(null);
+  const timelineRef     = useRef<HTMLDivElement>(null);
+  const lineRef         = useRef<SVGPathElement>(null);
+  const valuesRef       = useRef<HTMLDivElement>(null);
+  const servicesRef     = useRef<HTMLDivElement>(null);
+  const projectsRef     = useRef<HTMLDivElement>(null);
   const projectsWrapRef = useRef<HTMLDivElement>(null);
 
-  // Hero & Global animations
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. Hero Cinematic Pin & Scrub
+
+      // 1. Hero title entrance
+      gsap.fromTo(
+        heroTitleRef.current?.children ?? [],
+        { y: 60, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, stagger: 0.12, ease: "power3.out", delay: 0.2 }
+      );
+
+      // 2. Hero cinematic pin & scrub on scroll
       ScrollTrigger.create({
         trigger: heroRef.current,
         start: "top top",
         end: "+=60%",
         pin: true,
         scrub: 1,
-        animation: gsap.to(heroTextRef.current, {
+        animation: gsap.to(heroTitleRef.current, {
           y: -150,
           scale: 0.9,
           opacity: 0,
@@ -122,11 +128,10 @@ export default function AboutClient() {
         }),
       });
 
-      // 2. Timeline SVG Draw Animation
+      // 3. Timeline SVG Draw Animation
       if (lineRef.current && timelineRef.current) {
         const pathLength = lineRef.current.getTotalLength();
         gsap.set(lineRef.current, { strokeDasharray: pathLength, strokeDashoffset: pathLength });
-        
         gsap.to(lineRef.current, {
           strokeDashoffset: 0,
           ease: "none",
@@ -139,7 +144,7 @@ export default function AboutClient() {
         });
       }
 
-      // 3. Timeline Cards Slide-in
+      // 4. Timeline Cards Slide-in
       const historyItems = gsap.utils.toArray(".history-item");
       historyItems.forEach((item: unknown, i) => {
         const historyItem = item as HTMLElement;
@@ -148,73 +153,43 @@ export default function AboutClient() {
           historyItem,
           { opacity: 0, x: isLeft ? -80 : 80, scale: 0.95 },
           {
-            opacity: 1,
-            x: 0,
-            scale: 1,
-            duration: 1.2,
-            ease: "back.out(1.2)",
-            scrollTrigger: {
-              trigger: historyItem,
-              start: "top 85%",
-            },
+            opacity: 1, x: 0, scale: 1, duration: 1.2, ease: "back.out(1.2)",
+            scrollTrigger: { trigger: historyItem, start: "top 85%" },
           }
         );
       });
 
-      // 4. Mission & Values Cards Floating Stagger
+      // 5. Mission & Values Cards
       gsap.fromTo(
         ".value-card",
         { y: 80, opacity: 0, rotationX: 15 },
         {
-          y: 0,
-          opacity: 1,
-          rotationX: 0,
-          duration: 1,
-          stagger: 0.15,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: valuesRef.current,
-            start: "top 75%",
-          },
+          y: 0, opacity: 1, rotationX: 0, duration: 1, stagger: 0.15, ease: "power3.out",
+          scrollTrigger: { trigger: valuesRef.current, start: "top 75%" },
         }
       );
 
-      // 5. Team Reveal
+      // 6. Team Reveal
       gsap.fromTo(
         ".team-card",
         { y: 60, opacity: 0 },
         {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          stagger: 0.2,
-          ease: "back.out(1.5)",
-          scrollTrigger: {
-            trigger: ".team-section",
-            start: "top 80%",
-          },
+          y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: "back.out(1.5)",
+          scrollTrigger: { trigger: ".team-section", start: "top 80%" },
         }
       );
 
-      // 6. Services Highlight Stagger
+      // 7. Services Highlight Stagger
       gsap.fromTo(
         ".service-card-reveal",
         { y: 50, opacity: 0, scale: 0.9 },
         {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: "back.out(1.2)",
-          scrollTrigger: {
-            trigger: servicesRef.current,
-            start: "top 80%",
-          },
+          y: 0, opacity: 1, scale: 1, duration: 0.8, stagger: 0.1, ease: "back.out(1.2)",
+          scrollTrigger: { trigger: servicesRef.current, start: "top 80%" },
         }
       );
 
-      // 7. Project Highlight (Horizontal Scroll Gallery)
+      // 8. Project Highlight Horizontal Scroll
       if (projectsRef.current && projectsWrapRef.current) {
         const scrollWidth = projectsWrapRef.current.scrollWidth;
         const windowWidth = window.innerWidth;
@@ -241,69 +216,91 @@ export default function AboutClient() {
       <Navbar />
 
       {/* ==========================================
-          1. HERO SECTION (Spline 3D + Cinematic Reveal)
+          1. HERO — photo plein écran + titre éditorial
           ========================================== */}
-      <section ref={heroRef} className="relative h-screen flex flex-col justify-center items-center">
-        {/* Spline Background */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#04040a]/40 to-[#04040a] z-10 pointer-events-none" />
-          <div className="w-full h-full opacity-50 mix-blend-screen scale-110">
-            <Spline scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" />
-          </div>
+      <section ref={heroRef} className="relative h-screen flex flex-col justify-end overflow-hidden">
+
+        {/* Background image with overlay */}
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1800&q=80"
+            alt="CAS chantier"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(4,4,10,0.95) 50%, rgba(4,4,10,0.5) 100%)" }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to top, #04040a 0%, transparent 60%)" }} />
         </div>
 
-        {/* Floating Particles CSS Background (Custom Glows) */}
+        {/* Floating glows */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-30">
           <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-[#5319c6] rounded-full blur-[150px] mix-blend-screen animate-[pulse_4s_ease-in-out_infinite_alternate]" />
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#ff2c34] rounded-full blur-[150px] mix-blend-screen animate-[pulse_5s_ease-in-out_infinite_alternate_1s]" />
         </div>
 
-        {/* Text Area */}
-        <div ref={heroTextRef} className="relative z-20 max-w-5xl mx-auto px-6 text-center mt-12 backdrop-blur-sm bg-black/10 p-10 rounded-2xl border border-white/5">
-           <div className="inline-block px-5 py-2 border border-[#ff2c34]/50 rounded-full mb-8 shadow-[0_0_20px_rgba(255,44,52,0.2)] animate-[fadeIn_1s_ease_forwards]">
-             <span className="text-xs font-black uppercase tracking-[0.3em] text-[#ff2c34]">
-               {t.about.badge}
-             </span>
-           </div>
-           
-           <h1 className="text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-tight lg:leading-[0.9] mb-8 animate-[fadeInUp_1.5s_ease_0.2s_forwards] opacity-0">
-             {isRTL ? "من نحن" : "L'Expertise"}<br/>
-             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5319c6] to-white drop-shadow-2xl">
-               {isRTL ? "طاقة وابتكار" : "Courant Amousy"}
-             </span>
-           </h1>
-           
-           <p className="text-lg md:text-2xl text-gray-400 font-light max-w-3xl mx-auto leading-relaxed animate-[fadeInUp_1.5s_ease_0.4s_forwards] opacity-0">
-             {isRTL
-               ? "نلتزم بتقديم حلول تقنية موثوقة وحديثة ومستدامة لعملائنا في مجالات البناء والهندسة."
-               : "Expertise, fiabilité et innovation. Nous fournissons des solutions techniques fiables, modernes et durables."}
-           </p>
+        {/* Left accent line */}
+        <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-transparent via-[#ff2c34] to-transparent opacity-60" />
 
-           <div className="mt-12 animate-[fadeInUp_1.5s_ease_0.6s_forwards] opacity-0">
-             <Link
-               href="/contact"
-               className="group relative inline-flex items-center justify-center px-10 py-5 bg-white text-black overflow-hidden font-bold uppercase tracking-widest text-sm rounded-sm transition-transform hover:scale-105"
-             >
-               <span className="absolute inset-0 bg-[#ff2c34] transform scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
-               <span className="relative z-10 transition-colors duration-500 group-hover:text-white">
-                 {isRTL ? "تواصل معنا" : "Contactez-nous"}
-               </span>
-             </Link>
-           </div>
+        {/* Content */}
+        <div ref={heroTitleRef} className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pb-24 pt-40 w-full flex flex-col gap-6">
+
+          {/* Badge */}
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-px bg-[#ff2c34]" />
+            <span className="text-xs font-black uppercase tracking-[0.3em] text-[#ff2c34]">
+              {t.about.badge}
+            </span>
+          </div>
+
+          {/* Title */}
+          <h1 className="font-black leading-none tracking-tight" style={{ fontSize: "clamp(52px, 8vw, 110px)" }}>
+            <span className="text-white block">{isRTL ? "خبرة" : "L'Expertise"}</span>
+            <span
+              className="block"
+              style={{
+                WebkitTextStroke: "2px #5319c6",
+                color: "transparent",
+                fontSize: "clamp(48px, 7.5vw, 104px)",
+              }}
+            >
+              {isRTL ? "في خدمتكم" : "à votre service."}
+            </span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="max-w-xl text-lg leading-relaxed" style={{ color: "rgba(255,255,255,0.55)" }}>
+            {isRTL
+              ? "كوران أموزي سود — شركة متعددة الخدمات تجمع 8 تخصصات تقنية تحت سقف واحد."
+              : "Courant Amousy Sud — entreprise multi-services réunissant 8 expertises techniques sous un même toit."}
+          </p>
+
+          {/* Buttons */}
+          <div className={`flex flex-wrap gap-4 ${isRTL ? "flex-row-reverse" : ""}`}>
+            <Link
+              href="/contact"
+              className="group relative inline-flex items-center justify-center px-10 py-5 bg-white text-black overflow-hidden font-bold uppercase tracking-widest text-sm rounded-sm transition-transform hover:scale-105"
+            >
+              <span className="absolute inset-0 bg-[#ff2c34] transform scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
+              <span className="relative z-10 transition-colors duration-500 group-hover:text-white">
+                {isRTL ? "تواصل معنا" : "Contactez-nous"}
+              </span>
+            </Link>
+          </div>
         </div>
 
         {/* Scroll Indicator */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 animate-bounce pointer-events-none opacity-50">
-           <div className="w-[1px] h-16 bg-gradient-to-b from-[#5319c6] to-transparent"></div>
+          <div className="w-[1px] h-16 bg-gradient-to-b from-[#5319c6] to-transparent"></div>
         </div>
       </section>
 
       {/* ==========================================
           2. THE STORY / COMPANY HISTORY (Timeline)
           ========================================== */}
-      <section ref={timelineRef} className="relative z-20 py-32 bg-[#04040a]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          
+      <section className="relative z-20 py-32 bg-[#04040a]">
+        <div ref={timelineRef} className="max-w-7xl mx-auto px-6 lg:px-8">
+
           <div className="text-center mb-20">
             <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-widest text-[#5319c6] mb-6 drop-shadow-[0_0_15px_rgba(83,25,198,0.5)]">
               {isRTL ? "تاريخنا" : "Notre Histoire"}
@@ -314,59 +311,59 @@ export default function AboutClient() {
           </div>
 
           <div className="relative">
-             {/* Center SVG Line for Timeline */}
-             <div className="absolute top-0 bottom-0 left-[20px] md:left-1/2 md:-translate-x-1/2 w-[4px] z-0">
-                <svg className="h-full w-full" preserveAspectRatio="none">
-                   <path
-                     ref={lineRef}
-                     d={`M 2 0 L 2 10000`} // Abstract large height, scaled by container
-                     stroke="url(#timeline-grad)"
-                     strokeWidth="4"
-                     fill="none"
-                   />
-                   <defs>
-                     <linearGradient id="timeline-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                       <stop offset="0%" stopColor="#5319c6" />
-                       <stop offset="50%" stopColor="#ff2c34" />
-                       <stop offset="100%" stopColor="#5319c6" />
-                     </linearGradient>
-                   </defs>
-                </svg>
-             </div>
+            {/* Center SVG Line */}
+            <div className="absolute top-0 bottom-0 left-[20px] md:left-1/2 md:-translate-x-1/2 w-[4px] z-0">
+              <svg className="h-full w-full" preserveAspectRatio="none">
+                <path
+                  ref={lineRef}
+                  d="M 2 0 L 2 10000"
+                  stroke="url(#timeline-grad)"
+                  strokeWidth="4"
+                  fill="none"
+                />
+                <defs>
+                  <linearGradient id="timeline-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#5319c6" />
+                    <stop offset="50%" stopColor="#ff2c34" />
+                    <stop offset="100%" stopColor="#5319c6" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
 
-             <div className="space-y-16 md:space-y-32">
-               {HISTORY_DATA.map((item, i) => {
-                 const isLeft = i % 2 === 0;
-                 return (
-                   <div key={i} className={`history-item relative flex flex-col md:flex-row items-center justify-between w-full ${isLeft ? "md:flex-row" : "md:flex-row-reverse"}`}>
-                      
-                      {/* Timeline Dot */}
-                      <div className="absolute left-[20px] md:left-1/2 transform -translate-x-1/2 w-6 h-6 rounded-full bg-[#04040a] border-4 border-[#ff2c34] z-10 shadow-[0_0_15px_#ff2c34]" />
+            <div className="space-y-16 md:space-y-32">
+              {HISTORY_DATA.map((item, i) => {
+                const isLeft = i % 2 === 0;
+                return (
+                  <div key={i} className={`history-item relative flex flex-col md:flex-row items-center justify-between w-full ${isLeft ? "md:flex-row" : "md:flex-row-reverse"}`}>
 
-                      {/* Content Card */}
-                      <div className={`w-full md:w-[45%] pl-16 md:pl-0 ${isRTL ? (isLeft ? "md:text-right" : "md:text-left") : (isLeft ? "md:text-right" : "md:text-left")}`}>
-                        <div className="mb-2 text-5xl font-black text-transparent opacity-50" style={{ WebkitTextStroke: "1px #5319c6" }}>
-                          {item.year}
-                        </div>
-                        <h3 className="text-3xl font-bold mb-4 text-white">
-                          {isRTL ? item.titleAR : item.titleFR}
-                        </h3>
-                        <p className="text-gray-400 text-lg leading-relaxed">
-                          {isRTL ? item.descAR : item.descFR}
-                        </p>
+                    {/* Timeline Dot */}
+                    <div className="absolute left-[20px] md:left-1/2 transform -translate-x-1/2 w-6 h-6 rounded-full bg-[#04040a] border-4 border-[#ff2c34] z-10 shadow-[0_0_15px_#ff2c34]" />
+
+                    {/* Content Card */}
+                    <div className={`w-full md:w-[45%] pl-16 md:pl-0 ${isRTL ? (isLeft ? "md:text-right" : "md:text-left") : (isLeft ? "md:text-right" : "md:text-left")}`}>
+                      <div className="mb-2 text-5xl font-black text-transparent opacity-50" style={{ WebkitTextStroke: "1px #5319c6" }}>
+                        {item.year}
                       </div>
+                      <h3 className="text-3xl font-bold mb-4 text-white">
+                        {isRTL ? item.titleAR : item.titleFR}
+                      </h3>
+                      <p className="text-gray-400 text-lg leading-relaxed">
+                        {isRTL ? item.descAR : item.descFR}
+                      </p>
+                    </div>
 
-                      {/* Image Card */}
-                      <div className="w-full md:w-[45%] pl-16 md:pl-0 mt-8 md:mt-0">
-                        <div className="relative aspect-[16/9] rounded-xl overflow-hidden shadow-2xl border border-[#ffffff10] group">
-                           <Image src={item.image} alt={item.titleFR} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
-                           <div className="absolute inset-0 bg-black/30 group-hover:bg-transparent transition-colors duration-500" />
-                        </div>
+                    {/* Image Card */}
+                    <div className="w-full md:w-[45%] pl-16 md:pl-0 mt-8 md:mt-0">
+                      <div className="relative aspect-[16/9] rounded-xl overflow-hidden shadow-2xl border border-[#ffffff10] group">
+                        <Image src={item.image} alt={item.titleFR} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <div className="absolute inset-0 bg-black/30 group-hover:bg-transparent transition-colors duration-500" />
                       </div>
-                   </div>
-                 );
-               })}
-             </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
@@ -375,63 +372,59 @@ export default function AboutClient() {
           3. MISSION & VALUES (Glassmorphism Cards)
           ========================================== */}
       <section ref={valuesRef} className="py-32 relative bg-gradient-to-b from-[#04040a] to-[#020205] border-t border-b border-[#ffffff0a]">
-         <div className="absolute inset-0 bg-[url('/assets/images/noise.png')] opacity-[0.03] mix-blend-overlay pointer-events-none" />
-         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-20">
-               <span className="text-[#ff2c34] font-black uppercase tracking-[0.3em] text-sm block mb-4">
-                 {isRTL ? "جذورنا" : "Notre ADN"}
-               </span>
-               <h2 className="text-5xl lg:text-5xl font-black uppercase tracking-tighter max-w-4xl mx-auto">
-                 {isRTL 
-                   ? "توفير حلول تقنية موثوقة وحديثة ومستدامة لعملائنا." 
-                   : "Fournir des solutions techniques fiables, modernes et durables à nos clients."}
-               </h2>
-            </div>
-            
-            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6`}>
-               {t.about.vals.map((val, i) => (
-                 <div key={i} className="value-card group relative p-10 bg-[#020205]/50 backdrop-blur-xl border border-white/5 rounded-2xl hover:border-[#5319c6] transition-all duration-500 hover:-translate-y-4 hover:shadow-[0_20px_40px_rgba(83,25,198,0.2)]">
-                   <div className="absolute top-0 right-0 w-24 h-24 bg-[#5319c6] rounded-full blur-[50px] opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
-                   
-                   <div className={`flex items-center gap-4 mb-8 ${isRTL ? "flex-row-reverse" : ""}`}>
-                      <span className="text-4xl font-black text-transparent" style={{ WebkitTextStroke: "1px #ff2c34" }}>{val.num}</span>
-                      <div className="h-px w-10 bg-gradient-to-r from-[#ff2c34] to-transparent" />
-                   </div>
-                   
-                   <h3 className={`text-2xl font-black text-white mb-4 ${isRTL ? "text-right" : "text-left"}`}>{val.title}</h3>
-                   <p className={`text-gray-400 text-sm leading-relaxed ${isRTL ? "text-right" : "text-left"}`}>{val.desc}</p>
-                 </div>
-               ))}
-            </div>
-         </div>
+        <div className="absolute inset-0 bg-[url('/assets/images/noise.png')] opacity-[0.03] mix-blend-overlay pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <span className="text-[#ff2c34] font-black uppercase tracking-[0.3em] text-sm block mb-4">
+              {isRTL ? "جذورنا" : "Notre ADN"}
+            </span>
+            <h2 className="text-5xl lg:text-5xl font-black uppercase tracking-tighter max-w-4xl mx-auto">
+              {isRTL
+                ? "توفير حلول تقنية موثوقة وحديثة ومستدامة لعملائنا."
+                : "Fournir des solutions techniques fiables, modernes et durables à nos clients."}
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {t.about.vals.map((val, i) => (
+              <div key={i} className="value-card group relative p-10 bg-[#020205]/50 backdrop-blur-xl border border-white/5 rounded-2xl hover:border-[#5319c6] transition-all duration-500 hover:-translate-y-4 hover:shadow-[0_20px_40px_rgba(83,25,198,0.2)]">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-[#5319c6] rounded-full blur-[50px] opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
+
+                <div className={`flex items-center gap-4 mb-8 ${isRTL ? "flex-row-reverse" : ""}`}>
+                  <span className="text-4xl font-black text-transparent" style={{ WebkitTextStroke: "1px #ff2c34" }}>{val.num}</span>
+                  <div className="h-px w-10 bg-gradient-to-r from-[#ff2c34] to-transparent" />
+                </div>
+
+                <h3 className={`text-2xl font-black text-white mb-4 ${isRTL ? "text-right" : "text-left"}`}>{val.title}</h3>
+                <p className={`text-gray-400 text-sm leading-relaxed ${isRTL ? "text-right" : "text-left"}`}>{val.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* ==========================================
-          5. SERVICES HIGHLIGHT (Requested Grid Addition)
+          5. SERVICES HIGHLIGHT
           ========================================== */}
       <section ref={servicesRef} className="py-24 bg-[#0a0a1a] relative border-b border-[#ffffff0a]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-           <div className="text-center mb-16">
-              <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-widest text-white mb-6">
-                {isRTL ? "مجالات تخصصنا" : "Nos Domaines d'Expertise"}
-              </h2>
-           </div>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-widest text-white mb-6">
+              {isRTL ? "مجالات تخصصنا" : "Nos Domaines d'Expertise"}
+            </h2>
+          </div>
 
-           <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4`}>
-             {SERVICES_DATA.map((srv, i) => (
-                <Link key={srv.id} href="/services" className={`service-card-reveal group relative p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-[#ff2c34]/10 transition-colors duration-500 flex flex-col justify-center items-center text-center`}>
-                   <div className="w-16 h-16 rounded-full bg-[#020205] border border-white/10 flex items-center justify-center mb-6 text-[#5319c6] group-hover:text-[#ff2c34] group-hover:scale-110 transition-all duration-300">
-
-                   <div className="w-8 h-8">
-                        {srv.svg}
-                   </div>
-                   </div>
-                   <h3 className="text-lg font-bold text-white group-hover:text-[#ff2c34] transition-colors">{isRTL ? srv.titleAR : srv.titleFR}</h3>
-
-                   <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-[#ff2c34] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-x-0 group-hover:scale-x-100" />
-                </Link>
-             ))}
-           </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {SERVICES_DATA.map((srv) => (
+              <Link key={srv.id} href="/services" className="service-card-reveal group relative p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-[#ff2c34]/10 transition-colors duration-500 flex flex-col justify-center items-center text-center">
+                <div className="w-16 h-16 rounded-full bg-[#020205] border border-white/10 flex items-center justify-center mb-6 text-[#5319c6] group-hover:text-[#ff2c34] group-hover:scale-110 transition-all duration-300">
+                  <div className="w-8 h-8">{srv.svg}</div>
+                </div>
+                <h3 className="text-lg font-bold text-white group-hover:text-[#ff2c34] transition-colors">{isRTL ? srv.titleAR : srv.titleFR}</h3>
+                <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-[#ff2c34] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-x-0 group-hover:scale-x-100" />
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -439,75 +432,67 @@ export default function AboutClient() {
           6. PROJECT HIGHLIGHT (Horizontal Scroll Gallery)
           ========================================== */}
       <section ref={projectsRef} className="py-24 bg-[#020205] h-screen flex flex-col justify-center overflow-hidden border-b border-[#ffffff0a]">
-         <div className="px-6 lg:px-12 mb-10 w-full">
-            <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-widest text-[#5319c6]">
-              {isRTL ? "نموذج من إنجازاتنا" : "Nos Réalisations Clés"}
-            </h2>
-         </div>
+        <div className="px-6 lg:px-12 mb-10 w-full">
+          <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-widest text-[#5319c6]">
+            {isRTL ? "نموذج من إنجازاتنا" : "Nos Réalisations Clés"}
+          </h2>
+        </div>
 
-         <div className="flex w-full overflow-hidden">
-            <div ref={projectsWrapRef} className="flex gap-8 px-6 lg:px-12 w-max">
-               {PROJECTS_DATA.map((proj, i) => (
-                  <div key={i} className="w-[80vw] lg:w-[45vw] h-[55vh] relative rounded-2xl overflow-hidden group">
-                     {/* Parallax scaled image base */}
-                     <Image src={proj.image} alt={proj.titleFR} fill className="object-cover scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-out" />
-                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90" />
-                     
-                     <div className="absolute bottom-10 left-10 right-10 flex flex-col">
-                        <span className="w-max px-3 py-1 bg-[#ff2c34] text-xs font-bold uppercase tracking-widest mb-4">
-                           {proj.tag}
-                        </span>
-                        <h3 className="text-3xl md:text-4xl font-black text-white drop-shadow-lg">
-                           {proj.titleFR}
-                        </h3>
-                     </div>
-                  </div>
-               ))}
-            </div>
-         </div>
+        <div className="flex w-full overflow-hidden">
+          <div ref={projectsWrapRef} className="flex gap-8 px-6 lg:px-12 w-max">
+            {PROJECTS_DATA.map((proj, i) => (
+              <div key={i} className="w-[80vw] lg:w-[45vw] h-[55vh] relative rounded-2xl overflow-hidden group">
+                <Image src={proj.image} alt={proj.titleFR} fill className="object-cover scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-out" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90" />
+                <div className="absolute bottom-10 left-10 right-10 flex flex-col">
+                  <span className="w-max px-3 py-1 bg-[#ff2c34] text-xs font-bold uppercase tracking-widest mb-4">
+                    {proj.tag}
+                  </span>
+                  <h3 className="text-3xl md:text-4xl font-black text-white drop-shadow-lg">
+                    {proj.titleFR}
+                  </h3>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* ==========================================
           7. THE TEAM (Portrait Cards)
           ========================================== */}
       <section className="team-section py-32 bg-[#020205] relative border-t border-[#ffffff0a]">
-         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-16">
-               <div className={`max-w-2xl ${isRTL ? "text-right" : "text-left"}`}>
-                  <h2 className="text-4xl lg:text-5xl font-black uppercase text-white mb-6">
-                    {isRTL ? "الفريق المؤسس" : "L'Équipe Dirigeante"}
-                  </h2>
-                  <p className="text-gray-400 text-lg">
-                    {isRTL 
-                      ? "خبراء تقنيون يضعون شغفهم في خدمة نجاح مشاريعكم." 
-                      : "Des experts techniques qui mettent leur passion au service de la réussite de vos projets."}
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16">
+            <div className={`max-w-2xl ${isRTL ? "text-right" : "text-left"}`}>
+              <h2 className="text-4xl lg:text-5xl font-black uppercase text-white mb-6">
+                {isRTL ? "الفريق المؤسس" : "L'Équipe Dirigeante"}
+              </h2>
+              <p className="text-gray-400 text-lg">
+                {isRTL
+                  ? "خبراء تقنيون يضعون شغفهم في خدمة نجاح مشاريعكم."
+                  : "Des experts techniques qui mettent leur passion au service de la réussite de vos projets."}
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {TEAM_DATA.map((member, i) => (
+              <div key={i} className="team-card group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-crosshair">
+                <Image src={member.image} alt={member.name} fill className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 grayscale group-hover:grayscale-0" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#020205] via-[#020205]/40 to-transparent opacity-90 group-hover:opacity-60 transition-opacity duration-500" />
+                <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[#5319c6] rounded-full blur-[60px] opacity-0 group-hover:opacity-80 transition-opacity duration-700" />
+                <div className="absolute bottom-0 left-0 w-full p-8 flex flex-col justify-end text-center">
+                  <h3 className="text-3xl font-black text-white mb-2">{member.name}</h3>
+                  <p className="text-[#ff2c34] font-bold uppercase tracking-[0.2em] text-xs">
+                    {isRTL ? member.roleAR : member.roleFR}
                   </p>
-               </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-               {TEAM_DATA.map((member, i) => (
-                 <div key={i} className="team-card group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-crosshair">
-                    <Image src={member.image} alt={member.name} fill className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 grayscale group-hover:grayscale-0" />
-                    
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#020205] via-[#020205]/40 to-transparent opacity-90 group-hover:opacity-60 transition-opacity duration-500" />
-                    
-                    {/* Glow Accents */}
-                    <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[#5319c6] rounded-full blur-[60px] opacity-0 group-hover:opacity-80 transition-opacity duration-700" />
-
-                    <div className="absolute bottom-0 left-0 w-full p-8 flex flex-col justify-end text-center">
-                       <h3 className="text-3xl font-black text-white mb-2">{member.name}</h3>
-                       <p className="text-[#ff2c34] font-bold uppercase tracking-[0.2em] text-xs">
-                         {isRTL ? member.roleAR : member.roleFR}
-                       </p>
-                    </div>
-
-                    {/* Frame overlay */}
-                    <div className="absolute inset-4 border border-white/20 rounded-xl pointer-events-none scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 delay-100" />
-                 </div>
-               ))}
-            </div>
-         </div>
+                </div>
+                <div className="absolute inset-4 border border-white/20 rounded-xl pointer-events-none scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 delay-100" />
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* ==========================================
@@ -515,7 +500,7 @@ export default function AboutClient() {
           ========================================== */}
       <CTA />
       <Footer />
-      
+
       <style jsx global>{`
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
