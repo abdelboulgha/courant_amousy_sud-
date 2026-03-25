@@ -291,25 +291,27 @@ export default function ProjectsClient() {
 
         {/* Interactive Floating Project Images Background */}
         <div className="absolute inset-0 overflow-hidden z-10 pointer-events-none">
-          {typeof window !== 'undefined' && PROJECT_DATA.slice(0, 5).map((proj, i) => {
+          {typeof window !== 'undefined' && [...PROJECT_DATA, { image: "/assets/images/services/alarm.png", titleFR: "Alarm" }, { image: "/assets/images/services/zellige.png", titleFR: "Zellige" }].map((proj, i) => {
              const positions = [
-               { top: "15%", left: "5%", width: "20vw" },
-               { top: "60%", left: "15%", width: "18vw" },
-               { top: "20%", right: "8%", width: "22vw" },
-               { top: "65%", right: "12%", width: "16vw" },
-               { top: "35%", right: "35%", width: "25vw" }, // Center-ish background
+               { top: "10%", left: "5%", width: "20vw" },
+               { top: "60%", left: "12%", width: "18vw" },
+               { top: "15%", right: "6%", width: "22vw" },
+               { top: "65%", right: "10%", width: "16vw" },
+               { top: "30%", right: "32%", width: "24vw" }, 
+               { top: "8%", left: "38%", width: "14vw" },
+               { top: "75%", right: "40%", width: "20vw" },
+               { top: "45%", left: "30%", width: "12vw" },
              ];
              const pos = positions[i];
              
              // Mouse parallax effect (reverse direction based on index)
-             const isWindowValid = typeof window !== 'undefined';
-             const cx = isWindowValid ? window.innerWidth / 2 : 0;
-             const cy = isWindowValid ? window.innerHeight / 2 : 0;
+             const cx = window.innerWidth / 2;
+             const cy = window.innerHeight / 2;
              const offsetX = (mousePos.x - cx) * (i % 2 === 0 ? 0.04 : -0.04);
              const offsetY = (mousePos.y - cy) * (i % 2 === 0 ? 0.04 : -0.04);
 
              // Opacity is very low so it serves as an elegant background
-             const baseOpacity = i === 4 ? 0.1 : 0.3;
+             const baseOpacity = i % 3 === 0 ? 0.15 : 0.3;
 
              return (
                <div
@@ -328,23 +330,19 @@ export default function ProjectsClient() {
                  {/* Internal floating animation */}
                  <div className="relative w-full h-full" style={{ animation: `customFloat ${7 + i}s ease-in-out infinite alternate ${i * 0.5}s` }}>
                    <div className="absolute inset-0 bg-[#5319c6] mix-blend-color z-10 opacity-30" />
-                   <Image src={proj.image} alt={proj.titleFR} fill className="object-cover grayscale brightness-125" sizes="25vw" />
+                   <Image src={proj.image} alt={proj.titleFR || "Image"} fill className="object-cover grayscale brightness-125" sizes="25vw" />
                  </div>
                </div>
              );
           })}
         </div>
 
-        <div className="relative z-30 flex flex-col items-center text-center px-6">
-           <p className="text-xl md:text-2xl text-gray-400 font-light max-w-2xl opacity-0 animate-[fadeInUp_1s_ease_2s_forwards]">
+        <div className="relative z-30 flex flex-col items-center justify-center text-center px-6 h-full w-full">
+           <p className="text-xl md:text-2xl text-gray-400 font-light max-w-2xl opacity-0 animate-[fadeInUp_1s_ease_1.5s_forwards] drop-shadow-2xl bg-black/40 backdrop-blur-md px-8 py-5 rounded-2xl border border-white/5">
              {isRTL 
                ? "نحول التحديات الفنية إلى إنجازات مستدامة. استكشف بصمتنا عبر القطاعات."
                : "Nous transformons les défis techniques en accomplissements durables. Explorez notre empreinte."}
            </p>
-
-           <div className="absolute bottom-12 opacity-0 animate-[fadeIn_1s_ease_3s_forwards]">
-              <div className="w-[1px] h-16 bg-gradient-to-b from-[#ff2c34] to-transparent mx-auto animate-[pulse_2s_infinite]" />
-           </div>
         </div>
       </section>
 
