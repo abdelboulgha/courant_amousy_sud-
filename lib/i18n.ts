@@ -34,7 +34,7 @@ export const translations = {
       { value: "10+", label: "Années d'expérience" },
       { value: "500+", label: "Projets réalisés" },
       { value: "7", label: "Domaines d'expertise" },
-      { value: "98%", label: "Clients satisfaits" },
+      { value: "100%", label: "Clients satisfaits" },
     ],
     services: {
       badge: "Nos services",
@@ -235,7 +235,7 @@ export const translations = {
       { value: "+10", label: "سنوات من الخبرة" },
       { value: "+500", label: "مشروع منجز" },
       { value: "7", label: "مجالات الخبرة" },
-      { value: "98%", label: "عملاء راضون" },
+      { value: "100%", label: "عملاء راضون" },
     ],
     services: {
       badge: "خدماتنا",
