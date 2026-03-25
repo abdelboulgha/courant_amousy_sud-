@@ -289,8 +289,50 @@ export default function ProjectsClient() {
            }}
         />
 
-        <div className="absolute inset-0 opacity-40 mix-blend-screen overflow-hidden">
-          <Spline scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" />
+        {/* Interactive Floating Project Images Background */}
+        <div className="absolute inset-0 overflow-hidden z-10 pointer-events-none">
+          {typeof window !== 'undefined' && PROJECT_DATA.slice(0, 5).map((proj, i) => {
+             const positions = [
+               { top: "15%", left: "5%", width: "20vw" },
+               { top: "60%", left: "15%", width: "18vw" },
+               { top: "20%", right: "8%", width: "22vw" },
+               { top: "65%", right: "12%", width: "16vw" },
+               { top: "35%", right: "35%", width: "25vw" }, // Center-ish background
+             ];
+             const pos = positions[i];
+             
+             // Mouse parallax effect (reverse direction based on index)
+             const isWindowValid = typeof window !== 'undefined';
+             const cx = isWindowValid ? window.innerWidth / 2 : 0;
+             const cy = isWindowValid ? window.innerHeight / 2 : 0;
+             const offsetX = (mousePos.x - cx) * (i % 2 === 0 ? 0.04 : -0.04);
+             const offsetY = (mousePos.y - cy) * (i % 2 === 0 ? 0.04 : -0.04);
+
+             // Opacity is very low so it serves as an elegant background
+             const baseOpacity = i === 4 ? 0.1 : 0.3;
+
+             return (
+               <div
+                 key={i}
+                 className="absolute rounded-lg overflow-hidden border border-white/5 transition-transform duration-1000 ease-out"
+                 style={{
+                   top: pos.top,
+                   ...(pos.left ? { left: pos.left } : { right: pos.right }),
+                   width: pos.width,
+                   aspectRatio: i % 2 === 0 ? "3/4" : "1/1",
+                   transform: `translate(${offsetX}px, ${offsetY}px)`,
+                   opacity: baseOpacity,
+                   boxShadow: "0 20px 40px rgba(0,0,0,0.5)",
+                 }}
+               >
+                 {/* Internal floating animation */}
+                 <div className="relative w-full h-full" style={{ animation: `customFloat ${7 + i}s ease-in-out infinite alternate ${i * 0.5}s` }}>
+                   <div className="absolute inset-0 bg-[#5319c6] mix-blend-color z-10 opacity-30" />
+                   <Image src={proj.image} alt={proj.titleFR} fill className="object-cover grayscale brightness-125" sizes="25vw" />
+                 </div>
+               </div>
+             );
+          })}
         </div>
 
         <div className="relative z-30 flex flex-col items-center text-center px-6">
@@ -551,8 +593,14 @@ export default function ProjectsClient() {
 
       <style jsx global>{`
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes shimmer { 100% { transform: translateX(100%); } }
+        @keyframes customFloat { 
+            0% { transform: translateY(0px) rotate(0deg) scale(1); } 
+            50% { transform: translateY(-15px) rotate(2deg) scale(1.02); } 
+            100% { transform: translateY(0px) rotate(-1deg) scale(1); } 
+        }
       `}</style>
     </div>
   );
