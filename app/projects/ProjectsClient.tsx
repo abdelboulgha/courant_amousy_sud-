@@ -336,16 +336,6 @@ export default function ProjectsClient() {
         </div>
 
         <div className="relative z-30 flex flex-col items-center text-center px-6">
-           <div className="inline-block px-4 py-1.5 border border-[#5319c6]/50 rounded-full mb-8 backdrop-blur-md opacity-0 animate-[fadeIn_1s_ease_1s_forwards]">
-             <span className="text-xs font-bold uppercase tracking-widest text-[#a080ff] drop-shadow-lg">
-               {isRTL ? "معرض الإنجازات" : "Galerie d'excellence"}
-             </span>
-           </div>
-           
-           <h1 className="text-6xl md:text-8xl lg:text-[10rem] font-black uppercase tracking-tighter leading-none mb-6 perspective-1000">
-             {renderSplitText(isRTL ? "المشاريع" : "PROJETS")}
-           </h1>
-           
            <p className="text-xl md:text-2xl text-gray-400 font-light max-w-2xl opacity-0 animate-[fadeInUp_1s_ease_2s_forwards]">
              {isRTL 
                ? "نحول التحديات الفنية إلى إنجازات مستدامة. استكشف بصمتنا عبر القطاعات."
