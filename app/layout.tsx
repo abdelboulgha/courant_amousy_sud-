@@ -3,6 +3,7 @@ import { Nunito, Tajawal } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -30,6 +31,7 @@ export default function RootLayout({
   return (
     <html lang="fr" dir="ltr" className={`${nunito.variable} ${tajawal.variable} scroll-smooth`}>
       <body className="min-h-screen antialiased">
+        <ScrollToTop />
         <LanguageProvider>{children}</LanguageProvider>
         <WhatsAppButton />
       </body>
