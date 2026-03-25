@@ -95,9 +95,9 @@ const INFO_CARDS = [
       </svg>
     ),
     labelFR: "Écrivez-nous", labelAR: "راسلونا",
-    valueFR: "contact@courant-amousy-sud.ma", valueAR: "contact@courant-amousy-sud.ma",
+    valueFR: "ste.courantamousysud@gmail.com", valueAR: "ste.courantamousysud@gmail.com",
     subFR: "Réponse sous 24h garantie", subAR: "رد مضمون خلال 24 ساعة",
-    link: "mailto:contact@courant-amousy-sud.ma",
+    link: "mailto:ste.courantamousysud@gmail.com",
   },
   {
     icon: (
@@ -117,7 +117,7 @@ const INFO_CARDS = [
       </svg>
     ),
     labelFR: "Notre zone", labelAR: "منطقتنا",
-    valueFR: "Région Sud, Maroc", valueAR: "الجنوب، المغرب",
+    valueFR: "Agadir, Maroc", valueAR: "أكادير، المغرب",
     subFR: "Intervention rapide sur site", subAR: "تدخل سريع في الموقع",
     link: null,
   },
