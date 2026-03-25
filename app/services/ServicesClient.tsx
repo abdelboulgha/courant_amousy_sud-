@@ -48,7 +48,7 @@ const RICH = [
   },
   /* 02 — Plomberie */
   {
-    accent: "#00a8ff",
+    accent: "#ff2c34",
     image: "/assets/images/services/plumbing.png",
     features: {
       fr: [
@@ -76,7 +76,7 @@ const RICH = [
   },
   /* 03 — Climatisation */
   {
-    accent: "#00e5ff",
+    accent: "#5319c6",
     image: "/assets/images/services/ac.png",
     features: {
       fr: [
@@ -160,7 +160,7 @@ const RICH = [
   },
   /* 06 — Peinture & Décoration */
   {
-    accent: "#ff007f",
+    accent: "#ff2c34",
     image: "/assets/images/services/finishing.png",
     features: {
       fr: [
@@ -188,7 +188,7 @@ const RICH = [
   },
   /* 07 — Plâtre & Zellige */
   {
-    accent: "#8c52ff",
+    accent: "#5319c6",
     image: "/assets/images/services/zellige.png",
     features: {
       fr: [
@@ -216,7 +216,7 @@ const RICH = [
   },
   /* 08 — Travaux Divers */
   {
-    accent: "#ffbd00",
+    accent: "#ff2c34",
     image: "/assets/images/services/construction.png",
     features: {
       fr: [

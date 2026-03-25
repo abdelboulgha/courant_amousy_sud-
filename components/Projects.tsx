@@ -16,7 +16,7 @@ const PROJECT_IMAGES = [
   "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=1200&q=75", // painting / interior
 ];
 
-const TAG_COLORS = ["#5319c6", "#ff2c34", "#0f4c81", "#1a3a1a", "#3a1a3a"];
+const TAG_COLORS = ["#5319c6", "#ff2c34", "#5319c6", "#ff2c34", "#5319c6"];
 
 export default function Projects() {
   const sectionRef   = useRef<HTMLElement>(null);

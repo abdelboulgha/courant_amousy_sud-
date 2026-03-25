@@ -392,7 +392,7 @@ export default function ContactPage() {
               {/* Success banner */}
               {status === "success" && (
                 <div className="flex items-start gap-3 p-4 mb-6 text-sm"
-                  style={{ background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.2)", color: "#4ade80", flexDirection: isRTL ? "row-reverse" : "row" }}>
+                  style={{ background: "rgba(83,25,198,0.08)", border: "1px solid rgba(83,25,198,0.3)", color: "#a080ff", flexDirection: isRTL ? "row-reverse" : "row" }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ flexShrink: 0, marginTop: 2 }}>
                     <polyline points="20 6 9 17 4 12" />
                   </svg>

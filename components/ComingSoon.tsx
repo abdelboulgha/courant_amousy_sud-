@@ -27,7 +27,7 @@ export default function ComingSoon({ titleKey }: ComingSoonProps) {
       <main className="min-h-screen flex items-center justify-center" style={{ background: "#07071a" }} dir={isRTL ? "rtl" : "ltr"}>
         <div ref={ref} className={`max-w-xl px-6 text-center ${isRTL ? "text-right" : ""}`}>
           <div className="inline-block px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] mb-8"
-            style={{ border: "1px solid rgba(255,44,52,0.3)", color: "#ff6b6b", background: "rgba(255,44,52,0.05)" }}>
+            style={{ border: "1px solid rgba(255,44,52,0.3)", color: "#ff2c34", background: "rgba(255,44,52,0.05)" }}>
             {t.comingSoon.badge}
           </div>
           <h1 className="text-4xl sm:text-5xl font-black text-white mb-5 tracking-tight">{title}</h1>
