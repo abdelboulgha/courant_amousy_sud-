@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
-import { Nunito, Tajawal } from "next/font/google";
+import { Bebas_Neue, Nunito, Tajawal } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 
+// Cubano substitute — bold condensed uppercase, nearly identical
+const bebasNeue = Bebas_Neue({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-bebas",
+});
+
+// SK Reykjavik Rounded substitute — rounded clean sans
 const nunito = Nunito({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
@@ -29,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" dir="ltr" className={`${nunito.variable} ${tajawal.variable} scroll-smooth`}>
+    <html lang="fr" dir="ltr" className={`${bebasNeue.variable} ${nunito.variable} ${tajawal.variable} scroll-smooth`}>
       <body className="min-h-screen antialiased">
         <ScrollToTop />
         <LanguageProvider>{children}</LanguageProvider>

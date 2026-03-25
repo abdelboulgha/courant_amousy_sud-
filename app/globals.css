@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Tajawal:wght@300;400;500;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -9,19 +9,31 @@
   --dark2: #0d0d24;
   --light: #f5f5fa;
   --gray: #8888aa;
+  --font-title: var(--font-bebas), 'Arial Black', sans-serif;
+  --font-body: var(--font-nunito), 'Arial Rounded MT Bold', sans-serif;
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Inter', 'Tajawal', sans-serif;
+  font-family: var(--font-body);
   background-color: var(--dark);
   color: var(--white);
   overflow-x: hidden;
 }
 
-[dir="rtl"] body { font-family: 'Tajawal', 'Inter', sans-serif; }
+[dir="rtl"] body { font-family: var(--font-tajawal, 'Tajawal'), var(--font-body); }
+
+/* ── Charte graphique : Bebas Neue (≈ Cubano) pour tous les titres ── */
+h1, h2, h3 {
+  font-family: var(--font-title);
+  letter-spacing: 0.02em;
+}
+
+/* Utility class for Bebas Neue */
+.font-title { font-family: var(--font-title) !important; }
+.font-body  { font-family: var(--font-body)  !important; }
 
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--dark); }
