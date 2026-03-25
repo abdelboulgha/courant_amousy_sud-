@@ -1,7 +1,7 @@
 "use client";
 
 export default function WhatsAppButton() {
-  const phone = "33602467222"; // 0602467222 → +33 format
+  const phone = "212602467222"; // 0602467222 → +212 (Maroc)
   const message = encodeURIComponent("Bonjour, je souhaite obtenir un devis.");
   const href = `https://wa.me/${phone}?text=${message}`;
 

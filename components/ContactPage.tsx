@@ -84,8 +84,8 @@ const INFO_ITEMS = [
       </svg>
     ),
     label: { fr: "Téléphone", ar: "الهاتف" },
-    value: { fr: "+212 (0)X XX XX XX XX", ar: "+212 (0)X XX XX XX XX" },
-    link: "tel:+212XXXXXXXXX",
+    value: { fr: "+212 6 02 46 72 22", ar: "+212 6 02 46 72 22" },
+    link: "tel:+212602467222",
   },
   {
     icon: (
