@@ -20,14 +20,15 @@ const frameSrc = (i: number) =>
   `/assets/frames/ezgif-frame-${String(i + 1).padStart(3, "0")}.jpg`;
 
 // Labels: which scroll range each word appears (7 services)
+// Labels start at 0.03 — right after hero text fully fades at 0.02
 const LABELS = [
-  { fr: "Électricité",       ar: "الكهرباء",       start: 0.02, end: 0.13 },
-  { fr: "Plomberie",         ar: "السباكة",        start: 0.14, end: 0.25 },
-  { fr: "Climatisation",     ar: "تكييف الهواء",   start: 0.26, end: 0.37 },
-  { fr: "Vidéosurveillance", ar: "المراقبة",       start: 0.38, end: 0.49 },
-  { fr: "Système d'alarme",  ar: "نظام الإنذار",   start: 0.50, end: 0.61 },
-  { fr: "Peinture & Plâtre", ar: "الطلاء والجبس",  start: 0.62, end: 0.72 },
-  { fr: "Travaux divers",    ar: "أعمال متنوعة",   start: 0.73, end: 0.82 },
+  { fr: "Électricité",       ar: "الكهرباء",       start: 0.03, end: 0.14 },
+  { fr: "Plomberie",         ar: "السباكة",        start: 0.15, end: 0.26 },
+  { fr: "Climatisation",     ar: "تكييف الهواء",   start: 0.27, end: 0.40 },
+  { fr: "Vidéosurveillance", ar: "المراقبة",       start: 0.41, end: 0.52 },
+  { fr: "Système d'alarme",  ar: "نظام الإنذار",   start: 0.53, end: 0.63 },
+  { fr: "Peinture & Plâtre", ar: "الطلاء والجبس",  start: 0.64, end: 0.74 },
+  { fr: "Travaux divers",    ar: "أعمال متنوعة",   start: 0.75, end: 0.85 },
 ];
 
 /* ─── Component ───────────────────────────────────────────── */
@@ -185,8 +186,8 @@ export default function Hero() {
 
           // ─ Hero text (visible at start, fades out) ───────
           if (heroTextRef.current) {
-            const FADE_START = 0.06;
-            const FADE_END   = 0.22;
+            const FADE_START = 0.00;
+            const FADE_END   = 0.02;
             let a = 1;
             if (p > FADE_START) {
               a = Math.max(0, 1 - (p - FADE_START) / (FADE_END - FADE_START));
@@ -204,7 +205,7 @@ export default function Hero() {
 
           // ─ Logo reveal (after Travaux divers, grows over 18% scroll) ──
           if (logoRevealRef.current) {
-            const LOGO_START = 0.82;
+            const LOGO_START = 0.85;
             const LOGO_FULL  = 1.00;
             const a = p >= LOGO_START
               ? Math.min(1, (p - LOGO_START) / (LOGO_FULL - LOGO_START))
