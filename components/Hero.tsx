@@ -605,69 +605,74 @@ export default function Hero() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: 20,
+            gap: 24,
+            width: "100vw",
+            paddingTop: 40,
+            paddingBottom: 40,
+            background: "radial-gradient(ellipse 60% 70% at 50% 50%, rgba(7,7,26,0.92) 40%, transparent 100%)",
           }}
         >
+          {/* Logo image only — PNG already includes text */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/assets/LOGO-PNG.png"
             alt="Courant Amousy Sud"
-            style={{ width: "clamp(180px, 22vw, 300px)", height: "auto", filter: "drop-shadow(0 0 60px rgba(83,25,198,0.8)) drop-shadow(0 0 30px rgba(255,44,52,0.4))" }}
+            style={{
+              width: "clamp(200px, 26vw, 340px)",
+              height: "auto",
+              filter:
+                "drop-shadow(0 0 50px rgba(255,44,52,0.5)) drop-shadow(0 0 100px rgba(83,25,198,0.6))",
+            }}
           />
-          <span style={{
-            fontSize: 10,
-            fontWeight: 700,
-            letterSpacing: "0.38em",
-            textTransform: "uppercase",
-            color: "rgba(255,255,255,0.45)",
-          }}>
-            Courant Amousy Sud
-          </span>
+
+          {/* Divider */}
           <span style={{
             display: "block",
-            width: 40,
+            width: 60,
             height: 2,
             background: "linear-gradient(90deg, #5319c6, #ff2c34)",
+            borderRadius: 2,
           }} />
 
-          {/* CTA */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, marginTop: 8 }}>
-            <p style={{
-              fontSize: "clamp(12px, 1.4vw, 16px)",
-              color: "rgba(255,255,255,0.65)",
-              letterSpacing: "0.05em",
-              textAlign: "center",
-              maxWidth: 320,
-              lineHeight: 1.6,
-            }}>
-              {isRTL
-                ? "هل لديك مشروع؟ نحن هنا لتحويله إلى واقع."
-                : "Un projet en tête ? Nous sommes là pour le concrétiser."}
-            </p>
-            <a
-              href="/contact"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 10,
-                padding: "14px 36px",
-                background: "#ff2c34",
-                color: "#ffffff",
-                fontSize: 10,
-                fontWeight: 800,
-                textTransform: "uppercase",
-                letterSpacing: "0.22em",
-                textDecoration: "none",
-                boxShadow: "0 10px 40px -10px rgba(255,44,52,0.7)",
-                transition: "background 0.2s",
-              }}
-            >
-              {isRTL ? "تواصل معنا" : "Nous contacter"}
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </a>
-          </div>
+          {/* Tagline */}
+          <p style={{
+            fontSize: "clamp(13px, 1.5vw, 17px)",
+            color: "rgba(255,255,255,0.7)",
+            letterSpacing: "0.04em",
+            textAlign: "center",
+            maxWidth: 380,
+            lineHeight: 1.7,
+            margin: 0,
+          }}>
+            {isRTL
+              ? "هل لديك مشروع؟ نحن هنا لتحويله إلى واقع."
+              : "Un projet en tête\u00a0? Nous sommes là pour le concrétiser."}
+          </p>
+
+          {/* CTA button */}
+          <a
+            href="/contact"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "15px 40px",
+              background: "#ff2c34",
+              color: "#ffffff",
+              fontSize: 11,
+              fontWeight: 800,
+              textTransform: "uppercase",
+              letterSpacing: "0.22em",
+              textDecoration: "none",
+              boxShadow: "0 12px 40px -8px rgba(255,44,52,0.65)",
+              pointerEvents: "auto",
+            }}
+          >
+            {isRTL ? "تواصل معنا" : "Nous contacter"}
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </a>
         </div>
 
         {/* ── Scroll indicator ────────────────────────── */}
