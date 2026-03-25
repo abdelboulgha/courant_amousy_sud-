@@ -12,21 +12,22 @@ if (typeof window !== "undefined") {
 
 /* ─── Config ─────────────────────────────────────────────── */
 const TOTAL_FRAMES = 197;
-const SCROLL_MULTIPLIER = 6; // section height = 6 × 100vh
+const SCROLL_MULTIPLIER = 9; // section height = 9 × 100vh — more scroll time for logo reveal
 const SCRUB = 0.8;
+const FRAME_END_PROGRESS = 0.80; // last frame locked in at 80% → rest is for logo
 
 const frameSrc = (i: number) =>
   `/assets/frames/ezgif-frame-${String(i + 1).padStart(3, "0")}.jpg`;
 
 // Labels: which scroll range each word appears (7 services)
 const LABELS = [
-  { fr: "Électricité",       ar: "الكهرباء",       start: 0.02, end: 0.17 },
-  { fr: "Plomberie",         ar: "السباكة",        start: 0.18, end: 0.31 },
-  { fr: "Climatisation",     ar: "تكييف الهواء",   start: 0.32, end: 0.46 },
-  { fr: "Vidéosurveillance", ar: "المراقبة",       start: 0.47, end: 0.61 },
-  { fr: "Système d'alarme",  ar: "نظام الإنذار",   start: 0.62, end: 0.74 },
-  { fr: "Peinture & Plâtre", ar: "الطلاء والجبس",  start: 0.75, end: 0.87 },
-  { fr: "Travaux divers",    ar: "أعمال متنوعة",   start: 0.88, end: 0.97 },
+  { fr: "Électricité",       ar: "الكهرباء",       start: 0.02, end: 0.13 },
+  { fr: "Plomberie",         ar: "السباكة",        start: 0.14, end: 0.25 },
+  { fr: "Climatisation",     ar: "تكييف الهواء",   start: 0.26, end: 0.37 },
+  { fr: "Vidéosurveillance", ar: "المراقبة",       start: 0.38, end: 0.49 },
+  { fr: "Système d'alarme",  ar: "نظام الإنذار",   start: 0.50, end: 0.61 },
+  { fr: "Peinture & Plâtre", ar: "الطلاء والجبس",  start: 0.62, end: 0.72 },
+  { fr: "Travaux divers",    ar: "أعمال متنوعة",   start: 0.73, end: 0.82 },
 ];
 
 /* ─── Component ───────────────────────────────────────────── */
@@ -150,7 +151,7 @@ export default function Hero() {
     // Init logo hidden
     if (logoRevealRef.current) {
       logoRevealRef.current.style.opacity   = "0";
-      logoRevealRef.current.style.transform = "translate(-50%, -50%) scale(0.5)";
+      logoRevealRef.current.style.transform = "translate(-50%, -50%) scale(0.3)";
     }
 
     // Draw first frame
@@ -165,9 +166,10 @@ export default function Hero() {
         onUpdate(self) {
           const p = self.progress;
 
-          // ─ Frame update ─────────────────────────────────
+          // ─ Frame update (locked at last frame after FRAME_END_PROGRESS) ──
+          const frameProg = Math.min(p / FRAME_END_PROGRESS, 1);
           const newIdx = Math.min(
-            Math.floor(p * (TOTAL_FRAMES - 1)),
+            Math.floor(frameProg * (TOTAL_FRAMES - 1)),
             TOTAL_FRAMES - 1
           );
           if (newIdx !== frameIndexRef.current) {
@@ -200,15 +202,16 @@ export default function Hero() {
             );
           }
 
-          // ─ Logo reveal (last frames, after Travaux divers) ──
+          // ─ Logo reveal (after Travaux divers, grows over 18% scroll) ──
           if (logoRevealRef.current) {
-            const LOGO_START = 0.93;
+            const LOGO_START = 0.82;
+            const LOGO_FULL  = 1.00;
             const a = p >= LOGO_START
-              ? Math.min(1, (p - LOGO_START) / 0.07)
+              ? Math.min(1, (p - LOGO_START) / (LOGO_FULL - LOGO_START))
               : 0;
             logoRevealRef.current.style.opacity = String(a);
-            // Scale from 0.5 → 1.0 for a dramatic grow effect
-            const scale = 0.5 + a * 0.5;
+            // Scale 0.3 → 1.0 — dramatic grow over the whole remaining scroll
+            const scale = 0.3 + a * 0.7;
             logoRevealRef.current.style.transform = `translate(-50%, -50%) scale(${scale})`;
           }
 
@@ -594,7 +597,7 @@ export default function Hero() {
             position: "absolute",
             top: "50%",
             left: "50%",
-            transform: "translate(-50%, -50%) scale(0.5)",
+            transform: "translate(-50%, -50%) scale(0.3)",
             zIndex: 26,
             opacity: 0,
             pointerEvents: "none",
@@ -625,6 +628,45 @@ export default function Hero() {
             height: 2,
             background: "linear-gradient(90deg, #5319c6, #ff2c34)",
           }} />
+
+          {/* CTA */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, marginTop: 8 }}>
+            <p style={{
+              fontSize: "clamp(12px, 1.4vw, 16px)",
+              color: "rgba(255,255,255,0.65)",
+              letterSpacing: "0.05em",
+              textAlign: "center",
+              maxWidth: 320,
+              lineHeight: 1.6,
+            }}>
+              {isRTL
+                ? "هل لديك مشروع؟ نحن هنا لتحويله إلى واقع."
+                : "Un projet en tête ? Nous sommes là pour le concrétiser."}
+            </p>
+            <a
+              href="/contact"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 10,
+                padding: "14px 36px",
+                background: "#ff2c34",
+                color: "#ffffff",
+                fontSize: 10,
+                fontWeight: 800,
+                textTransform: "uppercase",
+                letterSpacing: "0.22em",
+                textDecoration: "none",
+                boxShadow: "0 10px 40px -10px rgba(255,44,52,0.7)",
+                transition: "background 0.2s",
+              }}
+            >
+              {isRTL ? "تواصل معنا" : "Nous contacter"}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
         </div>
 
         {/* ── Scroll indicator ────────────────────────── */}
