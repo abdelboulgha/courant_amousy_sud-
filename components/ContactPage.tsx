@@ -376,7 +376,7 @@ export default function ContactPage() {
       {/* ══ 4. FORM + FAQ ═════════════════════════════════════ */}
       <section className="py-20 border-t border-white/5" style={{ background: "#04040a" }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
+          <div className="flex flex-col gap-16 max-w-3xl mx-auto">
 
             {/* ── Form ─────────────────────────────────────── */}
             <div>
